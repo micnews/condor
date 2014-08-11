@@ -1,4 +1,6 @@
-var xhr = require('xhr')
+var getCssPath = require('./css-path')
+
+  , xhr = require('xhr')
 
   , windowWidth = window.innerWidth
   , windowHeight = window.innerHeight
@@ -9,17 +11,21 @@ var xhr = require('xhr')
 
   , startTime = Date.now()
 
-  , track = function (eventName, value) {
+  , track = function (eventType, extra, offset) {
+      extra = extra || []
+      offset = typeof(offset) === 'number' ? offset : Date.now() - startTime
+
       var csv = [
-              eventName
+              eventType
             , window.innerWidth
             , window.innerHeight
             , window.scrollX
             , window.scrollY
             , window.location.toString()
-            , Date.now() - startTime
+            , offset
             , navigator.userAgent
           ]
+          .concat(extra)
           .map(esc)
           .join(',')
 
@@ -66,11 +72,12 @@ track('init')
 
 var hidden = document.hidden || document.mozHidden || document.webkitHidden
 
+// only track this if we can, e.g. if we're running on a modern browser
 if (typeof(hidden) === 'boolean') {
   if (!hidden)
-    track('visible')
+    track('initial visibility', [ 'visible' ])
   else
-    track('hidden')
+    track('initial visibility', [ 'hidden' ])
 }
 
 // use onfocus/onblur so that we get notified whenever a user switches windows
@@ -83,6 +90,12 @@ window.onblur = function () {
   track('blur')
 }
 
-document.onclick = function () {
-  track('click')
+document.onclick = function (event) {
+  event = event || window.event
+
+  var elm = event.toElement
+    , path = elm ? getCssPath(elm) : undefined
+    , href = elm ? elm.getAttribute('href') : undefined
+
+  track('click', [ event.screenX, event.screenY, path, href ])
 }
