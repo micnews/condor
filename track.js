@@ -15,7 +15,13 @@ var getCssPath = require('./css-path')
   , resizingOffset = 0
 
 module.exports = function (callback) {
-  var track = function (eventType, extra, offset) {
+  var track = function (eventType, extra, offset, done) {
+        if (typeof(offset) === 'function') {
+          done = offset
+          offset = Date.now() - startTime
+        }
+
+        done = done || function () {}
         extra = extra || []
         offset = typeof(offset) === 'number' ? offset : Date.now() - startTime
 
@@ -33,7 +39,7 @@ module.exports = function (callback) {
             .map(esc)
             .join(',')
 
-        callback(csv)
+        callback(csv, done)
       }
 
   window.onresize = function () {
@@ -96,7 +102,21 @@ module.exports = function (callback) {
     var elm = event.toElement
       , path = elm ? getCssPath(elm) : undefined
       , href = elm ? elm.getAttribute('href') : undefined
+      , clickData = [ event.screenX, event.screenY, path, href, target ]
 
-    track('click', [ event.screenX, event.screenY, path, href ])
+    if (href && href[0] !== '#' && target !== '') {
+      event.preventDefault()
+      track('click', clickData, function () {
+        window.location = href
+      })
+      // if we can't track this click fast enough, just move along and
+      // go to the next address
+      // TODO: Find the sweetspot for this time
+      setTimeout(function () {
+        window.location = href
+      }, 400)
+    } else {
+      track('click', clickData)
+    }
   }
 }
