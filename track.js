@@ -11,6 +11,8 @@ var getCssPath = require('./css-path')
 
   , isScrolling = false
   , isResizing = false
+  , scrollingOffset = 0
+  , resizingOffset = 0
 
 module.exports = function (callback) {
   var track = function (eventType, extra, offset) {
@@ -40,10 +42,11 @@ module.exports = function (callback) {
     if (window.innerWidth !== windowWidth || window.innerHeight !== windowHeight) {
       windowWidth = window.innerWidth
       windowHeight = window.innerHeight
+      resizingOffset = Date.now() - startTime
       if (!isResizing) {
         isResizing = true
         setTimeout(function () {
-          track('resize')
+          track('resize', [], resizingOffset)
           isResizing = false
         }, 500)
       }
@@ -51,10 +54,11 @@ module.exports = function (callback) {
   }
 
   window.onscroll = function () {
+    scrollingOffset = Date.now() - startTime
     if (!isScrolling) {
       isScrolling = true
       setTimeout(function () {
-        track('scroll')
+        track('scroll', [], scrollingOffset)
         isScrolling = false
       }, 500)
     }
