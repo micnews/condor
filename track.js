@@ -34,6 +34,7 @@ module.exports = function (callback) {
               , window.location.toString()
               , offset
               , navigator.userAgent
+              , document.referrer
             ]
             .concat(extra)
             .map(esc)
