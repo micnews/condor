@@ -1,11 +1,8 @@
 var getCssPath = require('css-path')
+  , toCsv = require('csv-line')()
 
   , windowWidth = window.innerWidth
   , windowHeight = window.innerHeight
-
-  , esc = function (cell) {
-      return /[,\r\n"]/.test(cell) ? '"'+cell.replace(/"/g, '""')+'"' : cell
-    }
 
   , startTime = Date.now()
 
@@ -25,7 +22,7 @@ module.exports = function (callback) {
         extra = extra || []
         offset = typeof(offset) === 'number' ? offset : Date.now() - startTime
 
-        var csv = [
+        var array = [
                 eventType
               , window.innerWidth
               , window.innerHeight
@@ -37,10 +34,8 @@ module.exports = function (callback) {
               , document.referrer
             ]
             .concat(extra)
-            .map(esc)
-            .join(',')
 
-        callback(csv, done)
+        callback(toCsv(array), done)
       }
 
   window.onresize = function () {
