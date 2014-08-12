@@ -97,16 +97,25 @@ module.exports = function (callback) {
     track('blur')
   }
 
+  document.onchange = function (event) {
+    var elm = event.target
+      , path = elm ? getCssPath(elm, document.body) : undefined
+      , name = elm ? elm.getAttribute('name') : undefined
+
+    track('change', [ path, name ])
+  }
+
   document.onclick = function (event) {
     event = event || window.event
 
-    var elm = event.toElement
+    var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
+        // href & target is usefull for a-links
       , href = elm ? elm.getAttribute('href') : undefined
       , target = elm ? elm.getAttribute('target') : undefined
-      , clickData = [ event.screenX, event.screenY, path, href, target ]
+      , clickData = [ path, event.screenX, event.screenY, href, target]
 
-    if (href && href[0] !== '#' && target !== '_blank') {
+    if (elm.tagName === 'A' && href && href[0] !== '#' && target !== '_blank') {
       event.preventDefault()
       track('click', clickData, function () {
         window.location = href
