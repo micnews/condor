@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "css-path": "^1.0.0",
     "paramify": "^0.1.2",
     "serve-browserify": "^0.3.3",
     "xhr": "^1.14.1"

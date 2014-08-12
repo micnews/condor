@@ -1,4 +1,4 @@
-var getCssPath = require('./css-path')
+var getCssPath = require('css-path')
 
   , windowWidth = window.innerWidth
   , windowHeight = window.innerHeight
@@ -101,7 +101,7 @@ module.exports = function (callback) {
     event = event || window.event
 
     var elm = event.toElement
-      , path = elm ? getCssPath(elm) : undefined
+      , path = elm ? getCssPath(elm, document.body) : undefined
       , href = elm ? elm.getAttribute('href') : undefined
       , target = elm ? elm.getAttribute('target') : undefined
       , clickData = [ event.screenX, event.screenY, path, href, target ]
