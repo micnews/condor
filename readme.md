@@ -56,7 +56,7 @@ Columns corresponding to the following headers are appended when it's a `click`-
 * __href__ The href-attribute on the DOM-element that was clicked
 * __target__ the target-attribute on teh DOM-element that was clicked
 
-### initial visibliry
+### initial visibility
 
 Columns corresponding to the following headers is appended when it's a `initial visibility`-event:
 
