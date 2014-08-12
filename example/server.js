@@ -23,4 +23,6 @@ require('http').createServer(function (req, res) {
       res.end(html)
     })
 
-}).listen(1234)
+}).listen(1234, function () {
+  console.log('example page loaded on port 1234')
+})

@@ -1,4 +1,5 @@
 {
+  "name": "tracking-script",
   "dependencies": {
     "css-path": "^1.0.0",
     "csv-line": "^1.1.0",
