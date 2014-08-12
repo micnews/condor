@@ -1,5 +1,5 @@
 var getCssPath = require('css-path')
-  , toCsv = require('csv-line')()
+  , toCsv = require('csv-line')({ escapeNewlines: true })
 
   , windowWidth = window.innerWidth
   , windowHeight = window.innerHeight
