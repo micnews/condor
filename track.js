@@ -103,9 +103,10 @@ module.exports = function (callback) {
     var elm = event.toElement
       , path = elm ? getCssPath(elm) : undefined
       , href = elm ? elm.getAttribute('href') : undefined
+      , target = elm ? elm.getAttribute('target') : undefined
       , clickData = [ event.screenX, event.screenY, path, href, target ]
 
-    if (href && href[0] !== '#' && target !== '') {
+    if (href && href[0] !== '#' && target !== '_blank') {
       event.preventDefault()
       track('click', clickData, function () {
         window.location = href
