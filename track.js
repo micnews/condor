@@ -58,8 +58,6 @@ module.exports = function (callback) {
     track('load')
   }
 
-  track('init')
-
   var hidden = document.hidden || document.mozHidden || document.webkitHidden
 
   // only track this if we can, e.g. if we're running on a modern browser
