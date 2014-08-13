@@ -2,17 +2,15 @@ var debounce = require('debounce')
   , getCssPath = require('css-path')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
-  , windowWidth = window.innerWidth
-  , windowHeight = window.innerHeight
-
-  , startTime = Date.now()
-
-  , isResizing = false
-  , scrollingOffset = 0
-  , resizingOffset = 0
-
 module.exports = function (callback) {
-  var track = function (eventType, extra, offset, done) {
+  var windowWidth = window.innerWidth
+    , windowHeight = window.innerHeight
+
+    , startTime = Date.now()
+
+    , scrollingOffset = 0
+    , resizingOffset = 0
+    , track = function (eventType, extra, offset, done) {
         if (typeof(offset) === 'function') {
           done = offset
           offset = Date.now() - startTime
