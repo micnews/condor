@@ -11,7 +11,10 @@ require('http').createServer(function (req, res) {
 
   if (req.method === 'POST') {
     req.on('data', function (chunk) {
-      console.log(chunk.toString(), chunk.length, ++count)
+      console.log('Got a batch of data, size: %s', chunk.length)
+      chunk.toString().split('\n').forEach(function (row) {
+        console.log(row, row.length, ++count)
+      })
     })
     req.once('end', res.end.bind(res))
   } if (match('client.js'))
