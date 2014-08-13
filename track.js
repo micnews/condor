@@ -85,6 +85,10 @@ Track.prototype._startTracking = function () {
     track('change', [ path, name ])
   })
 
+  addEventListener(window, 'beforeunload', function (event) {
+    self.onend(self._toCsv('end'))
+  })
+
   addEventListener(document, 'click', function (event) {
     var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
@@ -93,22 +97,7 @@ Track.prototype._startTracking = function () {
       , target = elm ? elm.getAttribute('target') : undefined
       , extra = [ path, event.screenX, event.screenY, href, target]
 
-    if (elm.tagName === 'A' && href && href[0] !== '#' && target !== '_blank') {
-      event.preventDefault()
-
-      track('click', extra)
-      self.onend(self._toCsv('end'), function () {
-        window.location = href
-      })
-      // if we can't track this click fast enough, just move along and
-      // go to the next address
-      // TODO: Find the sweetspot for this time
-      setTimeout(function () {
-        window.location = href
-      }, 400)
-    } else {
-      track('click', extra)
-    }
+    track('click', extra)
   })
 }
 

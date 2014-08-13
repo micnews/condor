@@ -22,13 +22,15 @@ track.ondata = function (csv) {
   }, noop)
 }
 
-track.onend = function (csv, callback) {
+// this gets called by beforeunload - so anything in here must be synchronous
+track.onend = function (csv) {
   // this will be an end-event - meaning that the visit on the page has ended
   xhr({
       method: 'POST'
     , body: csv
     , uri: '/track'
-  }, callback)
+    , sync: true
+  }, noop)
 }
 ```
 
