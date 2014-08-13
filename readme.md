@@ -10,14 +10,26 @@ Running `node example/server.js` will start an example script on port 1234 that 
 
 ```js
 var xhr = require('xhr')
+  , track = require('../track')()
 
-require('./track')(function (csv, callback) {
+  , noop = function () {}
+
+track.ondata = function (csv) {
+  xhr({
+      method: 'POST'
+    , body: csv
+    , uri: '/track'
+  }, noop)
+}
+
+track.onend = function (csv, callback) {
+  // this will be an end-event - meaning that the visit on the page has ended
   xhr({
       method: 'POST'
     , body: csv
     , uri: '/track'
   }, callback)
-})
+}
 ```
 
 The callback to './track' gets called everytime a trackable event occur. _csv_ is the data about the event (see [data-format](#data-format) for details)
@@ -39,6 +51,7 @@ The data always has columns corresponding to these headers:
  * __visibility__ Event describing if the page is visible or not. The initial visibility (when the script was loaded) will have offset 0.
  * __change__ Emitted when a user changes a form (_document.onchange_)
  * __click__ Emitted when a user clicks on the page
+ * __end__ Emitted when a user ends its session on a page, e.g. closes the window or click on a link.
 * __windowWidth__ The width of the users window (Number in px)
 * __windowHeight__ The height of the users window (Number in px)
 * __scrollX__ How far the user has scrolled (horizontally)

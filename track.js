@@ -4,38 +4,48 @@ var addEventListener = require('add-event-listener')
   , getCssPath = require('css-path')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
-module.exports = function (callback) {
-  var windowWidth = window.innerWidth
-    , windowHeight = window.innerHeight
+  , Track = function () {
+      if (!(this instanceof Track))
+        return new Track()
 
-    , startTime = Date.now()
+      this._startTime = Date.now()
+      this._windowWidth = []
+      this._windowHeight = []
+      this._scrollOffset = 0
+      this._resizeOffset = 0
+      this.ondata = null
+      this.onend = null
+      this._startTracking()
+    }
 
-    , scrollingOffset = 0
-    , resizingOffset = 0
-    , track = function (eventType, extra, offset, done) {
-        if (typeof(offset) === 'function') {
-          done = offset
-          offset = Date.now() - startTime
-        }
+Track.prototype._toCsv = function (eventType, extra, offset) {
+  offset = typeof(offset) === 'number' ? offset : Date.now() - this._startTime
 
-        done = done || function () {}
-        extra = extra || []
-        offset = typeof(offset) === 'number' ? offset : Date.now() - startTime
+  var array = [
+          eventType
+        , window.innerWidth
+        , window.innerHeight
+        , window.scrollX
+        , window.scrollY
+        , window.location.toString()
+        , offset
+        , navigator.userAgent
+        , document.referrer
+      ]
 
-        var array = [
-                eventType
-              , window.innerWidth
-              , window.innerHeight
-              , window.scrollX
-              , window.scrollY
-              , window.location.toString()
-              , offset
-              , navigator.userAgent
-              , document.referrer
-            ]
-            .concat(extra)
+  if (extra)
+    array = array.concat(extra)
 
-        callback(toCsv(array), done)
+  return toCsv(array)
+}
+
+Track.prototype._startTracking = function () {
+  var self = this
+    , track = function (eventType, extra, offset) {
+        var csv = self._toCsv(eventType, extra, offset)
+
+        if (self.ondata)
+          self.ondata(csv)
       }
     , trackScroll = debounce(track.bind(null, 'scroll'), 500)
     , trackResize = debounce(track.bind(null, 'resize'), 500)
@@ -43,16 +53,16 @@ module.exports = function (callback) {
   addEventListener(window, 'resize', function () {
     // must do this cause IE9 is stupid
     // ... and I'm also seeing some weirdness when tracking in Chrome without it
-    if (window.innerWidth !== windowWidth || window.innerHeight !== windowHeight) {
-      windowWidth = window.innerWidth
-      windowHeight = window.innerHeight
-      resizingOffset = Date.now() - startTime
+    if (window.innerWidth !== self._windowWidth || window.innerHeight !== self._windowHeight) {
+      self._windowWidth = window.innerWidth
+      self._windowHeight = window.innerHeight
+      self._resizeOffset = Date.now() - startTime
       trackResize()
     }
   })
 
   addEventListener(window, 'scroll', function () {
-    scrollingOffset = Date.now() - startTime
+    self._scrollOffset = Date.now() - startTime
     trackScroll()
   })
 
@@ -81,11 +91,13 @@ module.exports = function (callback) {
         // href & target is usefull for a-links
       , href = elm ? elm.getAttribute('href') : undefined
       , target = elm ? elm.getAttribute('target') : undefined
-      , clickData = [ path, event.screenX, event.screenY, href, target]
+      , extra = [ path, event.screenX, event.screenY, href, target]
 
     if (elm.tagName === 'A' && href && href[0] !== '#' && target !== '_blank') {
       event.preventDefault()
-      track('click', clickData, function () {
+
+      track('click', extra)
+      self.onend(self._toCsv('end'), function () {
         window.location = href
       })
       // if we can't track this click fast enough, just move along and
@@ -95,7 +107,9 @@ module.exports = function (callback) {
         window.location = href
       }, 400)
     } else {
-      track('click', clickData)
+      track('click', extra)
     }
   })
 }
+
+module.exports = Track
