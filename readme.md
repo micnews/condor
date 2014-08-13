@@ -26,6 +26,10 @@ The callback to './track' gets called everytime a trackable event occur. _csv_ i
 
 ### Generic Headers
 
+```
+event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer
+```
+
 The data always has columns corresponding to these headers:
 
 * __event__ Describes what event that has occured. Is one of the following:
@@ -46,9 +50,12 @@ The data always has columns corresponding to these headers:
 * __userAgent__ The useragent the user has (_navigator.userAgent_)
 * __referrer__ The referrer header (_document.referrer_)
 
-### click specific headers
+### click-event
 
-Columns corresponding to the following headers are appended when it's a `click`-event:
+```
+event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,path,clickX,clickY,href,target
+```
+The following headers are specific to a `click` event:
 
 * __path__ The css-path describing the DOM-element that was clicked
 * __clickX__ The x-coordinate on the page that was clicked
@@ -58,13 +65,21 @@ Columns corresponding to the following headers are appended when it's a `click`-
 
 ### initial visibility
 
-Columns corresponding to the following headers is appended when it's a `initial visibility`-event:
+```
+event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,visibility
+```
+
+The following header is specific to a `initial visibility` event:
 
 *__visibility__ String describing if the page was visible or not. Can be one of `visible` or `hidden`
 
 ### change
 
-Columns corresponding to the following headers is appended when it's a `initial change`-event:
+```
+event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,path,name
+```
+
+The following headers are specific to a `change` event:
 
 * __path__ The css-path describing the DOM-element that was changed
 * __name__ The name-attribute on the DOM-element that was changed
