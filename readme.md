@@ -36,9 +36,7 @@ The data always has columns corresponding to these headers:
  * __load__ Emitted when the page has loaded (_window.onload_)
  * __resize__ Emitted everytime a user resize the window (_window.onresize_). All resizing within 500ms are tracked as one resize-event.
  * __scroll__ Emitted everytime a user scroll. All scrolling within 500ms is tracked as one scoll-event.
- * __initial visibility__ Event describing if the page was loaded visible or not. This event is only emitted if the user is on a modern browser.
- * __blur__ Emitted when a user changes windows/tab (_window.onblur_)
- * __focus__ Emitted when a user open the window/tab (_window.onfocus_)
+ * __visibility__ Event describing if the page is visible or not. The initial visibility (when the script was loaded) will have offset 0.
  * __change__ Emitted when a user changes a form (_document.onchange_)
  * __click__ Emitted when a user clicks on the page
 * __windowWidth__ The width of the users window (Number in px)
@@ -63,13 +61,13 @@ The following headers are specific to a `click` event:
 * __href__ The href-attribute on the DOM-element that was clicked
 * __target__ the target-attribute on teh DOM-element that was clicked
 
-### initial visibility
+### visibility
 
 ```
 event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,visibility
 ```
 
-The following header is specific to a `initial visibility` event:
+The following header is specific to a `visibility` event:
 
 *__visibility__ String describing if the page was visible or not. Can be one of `visible` or `hidden`
 

@@ -1,5 +1,6 @@
 var addEventListener = require('add-event-listener')
   , debounce = require('debounce')
+  , pageVisibility = require('page-visibility')
   , getCssPath = require('css-path')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
@@ -55,21 +56,16 @@ module.exports = function (callback) {
     trackScroll()
   })
 
-  var hidden = document.hidden || document.mozHidden || document.webkitHidden
-
-  // only track this if we can, e.g. if we're running on a modern browser
-  if (typeof(hidden) === 'boolean') {
-    if (!hidden)
-      track('initial visibility', [ 'visible' ])
-    else
-      track('initial visibility', [ 'hidden' ])
-  }
-
-  // use onfocus/onblur so that we get notified whenever a user switches windows
-  //  the html5 page visibility api only seem to track changing tabs
-  ;[ 'load', 'focus', 'blur' ].forEach(function (eventName) {
-    addEventListener(window, eventName, function() { track(eventName) })
+  pageVisibility(function (visible) {
+    // getting the visibility make take some time, but the  offset should be 0
+    // - it's the visibiltiy that existed when the page was loaded
+    track('visibility', [ visible ? 'visible' : 'hidden' ], 0 )
   })
+
+  addEventListener(window, 'load', function () { track('load') })
+
+  addEventListener(window, 'focus', function () { track('visibility', [ 'visible' ]) })
+  addEventListener(window, 'blur', function () { track('visibility', [ 'hidden' ]) })
 
   addEventListener(document, 'change', function (event) {
     var elm = event.target
