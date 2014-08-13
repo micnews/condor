@@ -41,7 +41,7 @@ The callback to './track' gets called everytime a trackable event occur. _csv_ i
 ### Generic Headers
 
 ```
-event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,path,clickX,clickY,href,target,visibility,name
+event,windowWidth,windowHeight,scollX,scollY,location,offset,referrer,path,clickX,clickY,href,target,visibility,name
 ```
 
 The data always has columns corresponding to these headers:
@@ -60,7 +60,6 @@ The data always has columns corresponding to these headers:
 * __scrollY__ How far the user has scrolled (vertically)
 * __location__ The page the user is on (_window.location_)
 * __offset__ Time (in ms) that has gone by since tracking was initiated
-* __userAgent__ The useragent the user has (_navigator.userAgent_)
 * __referrer__ The referrer header (_document.referrer_)
 * __path__ The css-path describing the DOM-element (if available). For _click_ events this is the element clicked, for _change_ events this is the element changed
 * __clickX__ The x-coordinate on the page that was clicked. Only applicable for _click_ events.

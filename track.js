@@ -31,7 +31,6 @@ Track.prototype._toCsv = function (eventType, extra, offset) {
         , window.scrollY
         , window.location.toString()
         , offset
-        , navigator.userAgent
         , document.referrer
         , extra.path
         , extra.clickX
