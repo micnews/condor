@@ -15,7 +15,7 @@ var debounce = require('debounce')
           method: 'POST'
         , body: body
         , uri: '/track'
-      })
+      }, noop)
     }, 1000)
 
 track.ondata = function (csv) {
