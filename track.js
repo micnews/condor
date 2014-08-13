@@ -21,6 +21,8 @@ var addEventListener = require('add-event-listener')
 Track.prototype._toCsv = function (eventType, extra, offset) {
   offset = typeof(offset) === 'number' ? offset : Date.now() - this._startTime
 
+  extra = extra || {}
+
   var array = [
           eventType
         , window.innerWidth
@@ -31,10 +33,14 @@ Track.prototype._toCsv = function (eventType, extra, offset) {
         , offset
         , navigator.userAgent
         , document.referrer
+        , extra.path
+        , extra.clickX
+        , extra.clickY
+        , extra.href
+        , extra.target
+        , extra.visibility
+        , extra.name
       ]
-
-  if (extra)
-    array = array.concat(extra)
 
   return toCsv(array)
 }
@@ -69,20 +75,24 @@ Track.prototype._startTracking = function () {
   pageVisibility(function (visible) {
     // getting the visibility make take some time, but the  offset should be 0
     // - it's the visibiltiy that existed when the page was loaded
-    track('visibility', [ visible ? 'visible' : 'hidden' ], 0 )
+    track('visibility', { visibility: visible ? 'visible' : 'hidden' }, 0 )
   })
 
   addEventListener(window, 'load', function () { track('load') })
 
-  addEventListener(window, 'focus', function () { track('visibility', [ 'visible' ]) })
-  addEventListener(window, 'blur', function () { track('visibility', [ 'hidden' ]) })
+  addEventListener(window, 'focus', function () {
+    track('visibility', { visibility: 'visible' })
+  })
+  addEventListener(window, 'blur', function () {
+    track('visibility', { visibility: 'hidden' })
+  })
 
   addEventListener(document, 'change', function (event) {
     var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
       , name = elm ? elm.getAttribute('name') : undefined
 
-    track('change', [ path, name ])
+    track('change', { path: path, name: name })
   })
 
   addEventListener(window, 'beforeunload', function (event) {
@@ -95,7 +105,7 @@ Track.prototype._startTracking = function () {
         // href & target is usefull for a-links
       , href = elm ? elm.getAttribute('href') : undefined
       , target = elm ? elm.getAttribute('target') : undefined
-      , extra = [ path, event.screenX, event.screenY, href, target]
+      , extra = { path: path, event: event.screenX, screenY: event.screenY, href: href, target: target }
 
     track('click', extra)
   })

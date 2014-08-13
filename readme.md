@@ -41,7 +41,7 @@ The callback to './track' gets called everytime a trackable event occur. _csv_ i
 ### Generic Headers
 
 ```
-event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer
+event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,path,clickX,clickY,href,target,visibility,name
 ```
 
 The data always has columns corresponding to these headers:
@@ -62,37 +62,10 @@ The data always has columns corresponding to these headers:
 * __offset__ Time (in ms) that has gone by since tracking was initiated
 * __userAgent__ The useragent the user has (_navigator.userAgent_)
 * __referrer__ The referrer header (_document.referrer_)
-
-### click-event
-
-```
-event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,path,clickX,clickY,href,target
-```
-The following headers are specific to a `click` event:
-
-* __path__ The css-path describing the DOM-element that was clicked
-* __clickX__ The x-coordinate on the page that was clicked
-* __clickY__ The y-coordinate on the page that was clicked
-* __href__ The href-attribute on the DOM-element that was clicked
-* __target__ the target-attribute on teh DOM-element that was clicked
-
-### visibility
-
-```
-event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,visibility
-```
-
-The following header is specific to a `visibility` event:
-
-*__visibility__ String describing if the page was visible or not. Can be one of `visible` or `hidden`
-
-### change
-
-```
-event,windowWidth,windowHeight,scollX,scollY,location,offset,userAgent,referrer,path,name
-```
-
-The following headers are specific to a `change` event:
-
-* __path__ The css-path describing the DOM-element that was changed
-* __name__ The name-attribute on the DOM-element that was changed
+* __path__ The css-path describing the DOM-element (if available). For _click_ events this is the element clicked, for _change_ events this is the element changed
+* __clickX__ The x-coordinate on the page that was clicked. Only applicable for _click_ events.
+* __clickY__ The y-coordinate on the page that was clicked. Only applicable for _click_ events.
+* __href__ The href-attribute on the a DOM-element associated with the DOM-element that was clicked. Only applicable for _click_ events.
+* __target__ The target-attribute on the a DOM-element associated with the DOM-element that was clicked. Only applicable for _click_ events.
+* __visibility__ String describing if the page was visible or not. Can be one of `visible` or `hidden`. Only applicable for _visibility_ events.
+* __name__ The name-attribute on the DOM-element that was changed. Only applicable for _change_ events.
