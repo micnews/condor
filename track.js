@@ -1,4 +1,5 @@
-var debounce = require('debounce')
+var addEventListener = require('add-event-listener')
+  , debounce = require('debounce')
   , getCssPath = require('css-path')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
@@ -38,7 +39,7 @@ module.exports = function (callback) {
     , trackScroll = debounce(track.bind(null, 'scroll'), 500)
     , trackResize = debounce(track.bind(null, 'resize'), 500)
 
-  window.onresize = function () {
+  addEventListener(window, 'resize', function () {
     // must do this cause IE9 is stupid
     // ... and I'm also seeing some weirdness when tracking in Chrome without it
     if (window.innerWidth !== windowWidth || window.innerHeight !== windowHeight) {
@@ -47,16 +48,12 @@ module.exports = function (callback) {
       resizingOffset = Date.now() - startTime
       trackResize()
     }
-  }
+  })
 
-  window.onscroll = function () {
+  addEventListener(window, 'scroll', function () {
     scrollingOffset = Date.now() - startTime
     trackScroll()
-  }
-
-  window.onload = function () {
-    track('load')
-  }
+  })
 
   var hidden = document.hidden || document.mozHidden || document.webkitHidden
 
@@ -70,25 +67,19 @@ module.exports = function (callback) {
 
   // use onfocus/onblur so that we get notified whenever a user switches windows
   //  the html5 page visibility api only seem to track changing tabs
-  window.onfocus = function () {
-    track('focus')
-  }
+  ;[ 'load', 'focus', 'blur' ].forEach(function (eventName) {
+    addEventListener(window, eventName, function() { track(eventName) })
+  })
 
-  window.onblur = function () {
-    track('blur')
-  }
-
-  document.onchange = function (event) {
+  addEventListener(document, 'change', function (event) {
     var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
       , name = elm ? elm.getAttribute('name') : undefined
 
     track('change', [ path, name ])
-  }
+  })
 
-  document.onclick = function (event) {
-    event = event || window.event
-
+  addEventListener(document, 'click', function (event) {
     var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
         // href & target is usefull for a-links
@@ -110,5 +101,5 @@ module.exports = function (callback) {
     } else {
       track('click', clickData)
     }
-  }
+  })
 }
