@@ -56,13 +56,13 @@ Track.prototype._startTracking = function () {
     if (window.innerWidth !== self._windowWidth || window.innerHeight !== self._windowHeight) {
       self._windowWidth = window.innerWidth
       self._windowHeight = window.innerHeight
-      self._resizeOffset = Date.now() - startTime
+      self._resizeOffset = Date.now() - self._startTime
       trackResize()
     }
   })
 
   addEventListener(window, 'scroll', function () {
-    self._scrollOffset = Date.now() - startTime
+    self._scrollOffset = Date.now() - self._startTime
     trackScroll()
   })
 
