@@ -1,4 +1,5 @@
-var getCssPath = require('css-path')
+var debounce = require('debounce')
+  , getCssPath = require('css-path')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
   , windowWidth = window.innerWidth
@@ -6,7 +7,6 @@ var getCssPath = require('css-path')
 
   , startTime = Date.now()
 
-  , isScrolling = false
   , isResizing = false
   , scrollingOffset = 0
   , resizingOffset = 0
@@ -37,6 +37,8 @@ module.exports = function (callback) {
 
         callback(toCsv(array), done)
       }
+    , trackScroll = debounce(track.bind(null, 'scroll'), 500)
+    , trackResize = debounce(track.bind(null, 'resize'), 500)
 
   window.onresize = function () {
     // must do this cause IE9 is stupid
@@ -45,25 +47,13 @@ module.exports = function (callback) {
       windowWidth = window.innerWidth
       windowHeight = window.innerHeight
       resizingOffset = Date.now() - startTime
-      if (!isResizing) {
-        isResizing = true
-        setTimeout(function () {
-          track('resize', [], resizingOffset)
-          isResizing = false
-        }, 500)
-      }
+      trackResize()
     }
   }
 
   window.onscroll = function () {
     scrollingOffset = Date.now() - startTime
-    if (!isScrolling) {
-      isScrolling = true
-      setTimeout(function () {
-        track('scroll', [], scrollingOffset)
-        isScrolling = false
-      }, 500)
-    }
+    trackScroll()
   }
 
   window.onload = function () {
