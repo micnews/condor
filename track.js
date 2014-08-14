@@ -39,6 +39,8 @@ Track.prototype._toCsv = function (eventType, extra, offset) {
         , extra.target
         , extra.visibility
         , extra.name
+        , extra.trackableType
+        , extra.trackableValue
       ]
 
   return toCsv(array)
@@ -77,7 +79,23 @@ Track.prototype._startTracking = function () {
     track('visibility', { visibility: visible ? 'visible' : 'hidden' }, 0 )
   })
 
-  addEventListener(window, 'load', function () { track('load') })
+  addEventListener(window, 'load', function () {
+    track('load')
+
+    var trackable = document.querySelectorAll('[data-trackable-type]')
+
+    for(var i = 0; i < trackable.length; ++i) {
+      if (trackable[i].getAttribute('data-trackable-value')) {
+        track(
+          'trackable-load',
+          {
+              trackableValue: trackable[i].getAttribute('data-trackable-value')
+            , trackableType: trackable[i].getAttribute('data-trackable-type')
+          }
+        )
+      }
+    }
+  })
 
   addEventListener(window, 'focus', function () {
     track('visibility', { visibility: 'visible' })
