@@ -67,6 +67,27 @@ Track.prototype._startTracking = function () {
       }
     , trackScroll = debounce(track.bind(null, 'scroll'), 500)
     , trackResize = debounce(track.bind(null, 'resize'), 500)
+    , trackedVisibleElements = []
+    , trackVisibleTrackingElements = function () {
+        var trackable = document.querySelectorAll('[data-trackable-type]')
+          , elm
+
+        for(var i = 0; i < trackable.length; ++i) {
+          elm = trackable[i]
+
+          if (elm.getBoundingClientRect().top < window.innerHeight && !elm.trackedVisibility) {
+            elm.trackedVisibility = true
+            track(
+              'trackable-visible',
+              {
+                  trackableValue: trackable[i].getAttribute('data-trackable-value')
+                , trackableType: trackable[i].getAttribute('data-trackable-type')
+              }
+            )
+          }
+        }
+
+      }
 
   addEventListener(window, 'resize', function () {
     // must do this cause IE9 is stupid
@@ -81,6 +102,9 @@ Track.prototype._startTracking = function () {
 
   addEventListener(window, 'scroll', function () {
     self._scrollOffset = Date.now() - self._startTime
+
+    trackVisibleTrackingElements()
+
     trackScroll()
   })
 
@@ -106,6 +130,8 @@ Track.prototype._startTracking = function () {
         )
       }
     }
+
+    trackVisibleTrackingElements()
   })
 
   addEventListener(window, 'focus', function () {
@@ -130,7 +156,9 @@ Track.prototype._startTracking = function () {
   addEventListener(document, 'click', function (event) {
     var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
-        // href & target is usefull for a-links
+        // href & target is useful for a-element
+        // if we're in a subelement, see if there's a parentNode that's
+        // an a-element
       , aElm = (function (aElm) {
           for(aElm = aElm; aElm.tagName; aElm = aElm.parentNode ) {
             if (aElm.tagName === 'A')
