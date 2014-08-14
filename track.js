@@ -4,6 +4,8 @@ var addEventListener = require('add-event-listener')
   , getCssPath = require('css-path')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
+  , slice = Array.prototype.slice
+
   , Track = function () {
       if (!(this instanceof Track))
         return new Track()
@@ -16,6 +18,22 @@ var addEventListener = require('add-event-listener')
       this.ondata = null
       this.onend = null
       this._startTracking()
+    }
+  , isTrackable = function (elm) {
+      return elm.getAttribute('data-trackable-type') && elm.getAttribute('data-trackable-value')
+    }
+  , findTrackable = function (elm) {
+      var trackable = []
+
+      for(; !!elm.tagName; elm = elm.parentNode) {
+        if (isTrackable(elm))
+          trackable.push(elm)
+      }
+
+      return trackable
+    }
+  , findAllTrackable = function () {
+      return slice.call(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
     }
 
 Track.prototype._toCsv = function (eventType, extra, offset) {
@@ -39,6 +57,8 @@ Track.prototype._toCsv = function (eventType, extra, offset) {
         , extra.target
         , extra.visibility
         , extra.name
+        , extra.trackableType
+        , extra.trackableValue
       ]
 
   return toCsv(array)
@@ -54,6 +74,24 @@ Track.prototype._startTracking = function () {
       }
     , trackScroll = debounce(track.bind(null, 'scroll'), 500)
     , trackResize = debounce(track.bind(null, 'resize'), 500)
+    , trackTrackable = function (eventType, elm) {
+        track(
+            eventType
+          , {
+                trackableValue: elm.getAttribute('data-trackable-value')
+              , trackableType: elm.getAttribute('data-trackable-type')
+              , path: getCssPath(elm)
+            }
+        )
+      }
+    , trackVisibleTrackingElements = function () {
+        findAllTrackable().forEach(function (elm) {
+          if (elm.getBoundingClientRect().top < window.innerHeight && !elm.trackedVisibility) {
+            elm.trackedVisibility = true
+            trackTrackable('trackable-visible', elm)
+          }
+        })
+      }
 
   addEventListener(window, 'resize', function () {
     // must do this cause IE9 is stupid
@@ -68,6 +106,9 @@ Track.prototype._startTracking = function () {
 
   addEventListener(window, 'scroll', function () {
     self._scrollOffset = Date.now() - self._startTime
+
+    trackVisibleTrackingElements()
+
     trackScroll()
   })
 
@@ -77,7 +118,15 @@ Track.prototype._startTracking = function () {
     track('visibility', { visibility: visible ? 'visible' : 'hidden' }, 0 )
   })
 
-  addEventListener(window, 'load', function () { track('load') })
+  addEventListener(window, 'load', function () {
+    track('load')
+
+    findAllTrackable().forEach(function (elm) {
+      trackTrackable('trackable-load', elm)
+    })
+
+    trackVisibleTrackingElements()
+  })
 
   addEventListener(window, 'focus', function () {
     track('visibility', { visibility: 'visible' })
@@ -101,7 +150,9 @@ Track.prototype._startTracking = function () {
   addEventListener(document, 'click', function (event) {
     var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
-        // href & target is usefull for a-links
+        // href & target is useful for a-element
+        // if we're in a subelement, see if there's a parentNode that's
+        // an a-element
       , aElm = (function (aElm) {
           for(aElm = aElm; aElm.tagName; aElm = aElm.parentNode ) {
             if (aElm.tagName === 'A')
@@ -113,6 +164,18 @@ Track.prototype._startTracking = function () {
       , extra = { path: path, event: event.screenX, screenY: event.screenY, href: href, target: target }
 
     track('click', extra)
+
+    findTrackable(elm).forEach(function (trackElm) {
+      trackTrackable('trackable-click', trackElm)
+    })
+  })
+
+  addEventListener(document, 'mouseover', function (event) {
+    var elm = event.target
+
+    findTrackable(elm).forEach(function (trackElm) {
+      trackTrackable('trackable-hover', trackElm)
+    })
   })
 }
 
