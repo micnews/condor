@@ -9,5 +9,11 @@
     "paramify": "^0.1.2",
     "serve-browserify": "^0.3.3",
     "xhr": "^1.14.1"
+  },
+  "devDependencies": {
+    "csv-parser": "^1.4.4",
+    "gnode": "0.0.8",
+    "tape": "^2.14.0",
+    "yiewd": "^0.5.0"
   }
 }

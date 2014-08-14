@@ -1,0 +1,3 @@
+require('gnode')
+
+require('./test')
