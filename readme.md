@@ -4,7 +4,7 @@ Track what a user does on a site in csv-format
 
 ## Example
 
-Running `node example/server.js` will start an example script on port 1234 that does POST requests whenever an event is tracked, and that event is then printed to the terminal
+Running `node example/server.js` will start a server on `localhost:1234` that does POST requests whenever an event is tracked, and that event is then printed to the terminal
 
 ## Usage
 
@@ -14,7 +14,10 @@ var xhr = require('xhr')
 
   , noop = function () {}
 
-track.ondata = function (csv) {
+track.onevent = function (csv) {
+  // this callback is called everytime an event happens
+  // the data is a line of csv, see below for information on the format of the
+  // csv
   xhr({
       method: 'POST'
     , body: csv
@@ -36,13 +39,15 @@ track.onend = function (csv) {
 
 The callback to './track' gets called everytime a trackable event occur. _csv_ is the data about the event (see [data-format](#data-format) for details)
 
-## Data format
+## Csv format
+
+Track is done in csv that corresponds to the following headers:
 
 ```
 event,windowWidth,windowHeight,scollX,scollY,location,offset,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
 ```
 
-The data always has columns corresponding to these headers:
+If not explicitly written out, the columns are always included (when available). For example, there's always a column describing the width of the window and if a referrer exists that's also always included in the events.
 
 * __event__ Describes what event that has occured. Is one of the following:
   * __load__ Emitted when the page has loaded (_window.onload_)
