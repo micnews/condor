@@ -17,6 +17,17 @@ var addEventListener = require('add-event-listener')
       this.onend = null
       this._startTracking()
     }
+  , findTrackable = function (elm) {
+      var trackable = []
+
+      for(; elm.tagName; elm = elm.parentNode) {
+        if (elm.getAttribute('data-trackable-type') && elm.getAttribute('data-trackable-value')) {
+          trackable.push(elm)
+        }
+      }
+
+      return trackable
+    }
 
 Track.prototype._toCsv = function (eventType, extra, offset) {
   offset = typeof(offset) === 'number' ? offset : Date.now() - this._startTime
@@ -131,6 +142,16 @@ Track.prototype._startTracking = function () {
       , extra = { path: path, event: event.screenX, screenY: event.screenY, href: href, target: target }
 
     track('click', extra)
+
+    findTrackable(elm).forEach(function (trackElm) {
+      track(
+          'trackable-click'
+        , {
+              trackableType: trackElm.getAttribute('data-trackable-type')
+            , trackableValue: trackElm.getAttribute('data-trackable-value')
+          }
+      )
+    })
   })
 }
 
