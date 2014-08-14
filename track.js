@@ -102,8 +102,14 @@ Track.prototype._startTracking = function () {
     var elm = event.target
       , path = elm ? getCssPath(elm, document.body) : undefined
         // href & target is usefull for a-links
-      , href = elm ? elm.getAttribute('href') : undefined
-      , target = elm ? elm.getAttribute('target') : undefined
+      , aElm = (function (aElm) {
+          for(aElm = aElm; aElm.tagName; aElm = aElm.parentNode ) {
+            if (aElm.tagName === 'A')
+              return aElm
+          }
+        })(elm)
+      , href = aElm ? aElm.getAttribute('href') : undefined
+      , target = aElm ? aElm.getAttribute('target') : undefined
       , extra = { path: path, event: event.screenX, screenY: event.screenY, href: href, target: target }
 
     track('click', extra)
