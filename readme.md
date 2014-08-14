@@ -38,10 +38,8 @@ The callback to './track' gets called everytime a trackable event occur. _csv_ i
 
 ## Data format
 
-### Generic Headers
-
 ```
-event,windowWidth,windowHeight,scollX,scollY,location,offset,referrer,path,clickX,clickY,href,target,visibility,name
+event,windowWidth,windowHeight,scollX,scollY,location,offset,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
 ```
 
 The data always has columns corresponding to these headers:
