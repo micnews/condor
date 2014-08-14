@@ -4,6 +4,8 @@ var addEventListener = require('add-event-listener')
   , getCssPath = require('css-path')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
+  , slice = Array.prototype.slice
+
   , Track = function () {
       if (!(this instanceof Track))
         return new Track()
@@ -17,16 +19,21 @@ var addEventListener = require('add-event-listener')
       this.onend = null
       this._startTracking()
     }
+  , isTrackable = function (elm) {
+      return elm.getAttribute('data-trackable-type') && elm.getAttribute('data-trackable-value')
+    }
   , findTrackable = function (elm) {
       var trackable = []
 
-      for(; elm.tagName; elm = elm.parentNode) {
-        if (elm.getAttribute('data-trackable-type') && elm.getAttribute('data-trackable-value')) {
+      for(; !!elm.tagName; elm = elm.parentNode) {
+        if (isTrackable(elm))
           trackable.push(elm)
-        }
       }
 
       return trackable
+    }
+  , findAllTrackable = function () {
+      return slice.call(document.querySelectorAll('[data-trackable-type][data-trackable-value'))
     }
 
 Track.prototype._toCsv = function (eventType, extra, offset) {
@@ -67,26 +74,22 @@ Track.prototype._startTracking = function () {
       }
     , trackScroll = debounce(track.bind(null, 'scroll'), 500)
     , trackResize = debounce(track.bind(null, 'resize'), 500)
-    , trackedVisibleElements = []
+    , trackTrackable = function (eventType, elm) {
+        track(
+            eventType
+          , {
+                trackableValue: elm.getAttribute('data-trackable-value')
+              , trackableType: elm.getAttribute('data-trackable-type')
+            }
+        )
+      }
     , trackVisibleTrackingElements = function () {
-        var trackable = document.querySelectorAll('[data-trackable-type]')
-          , elm
-
-        for(var i = 0; i < trackable.length; ++i) {
-          elm = trackable[i]
-
+        findAllTrackable().forEach(function (elm) {
           if (elm.getBoundingClientRect().top < window.innerHeight && !elm.trackedVisibility) {
             elm.trackedVisibility = true
-            track(
-              'trackable-visible',
-              {
-                  trackableValue: trackable[i].getAttribute('data-trackable-value')
-                , trackableType: trackable[i].getAttribute('data-trackable-type')
-              }
-            )
+            trackTrackable('trackable-visible', elm)
           }
-        }
-
+        })
       }
 
   addEventListener(window, 'resize', function () {
@@ -117,19 +120,9 @@ Track.prototype._startTracking = function () {
   addEventListener(window, 'load', function () {
     track('load')
 
-    var trackable = document.querySelectorAll('[data-trackable-type]')
-
-    for(var i = 0; i < trackable.length; ++i) {
-      if (trackable[i].getAttribute('data-trackable-value')) {
-        track(
-          'trackable-load',
-          {
-              trackableValue: trackable[i].getAttribute('data-trackable-value')
-            , trackableType: trackable[i].getAttribute('data-trackable-type')
-          }
-        )
-      }
-    }
+    findAllTrackable().forEach(function (elm) {
+      trackTrackable('trackable-load', elm)
+    })
 
     trackVisibleTrackingElements()
   })
@@ -172,13 +165,7 @@ Track.prototype._startTracking = function () {
     track('click', extra)
 
     findTrackable(elm).forEach(function (trackElm) {
-      track(
-          'trackable-click'
-        , {
-              trackableType: trackElm.getAttribute('data-trackable-type')
-            , trackableValue: trackElm.getAttribute('data-trackable-value')
-          }
-      )
+      trackTrackable('trackable-click', trackElm)
     })
   })
 
@@ -186,13 +173,7 @@ Track.prototype._startTracking = function () {
     var elm = event.target
 
     findTrackable(elm).forEach(function (trackElm) {
-      track(
-          'trackable-hover'
-        , {
-              trackableType: trackElm.getAttribute('data-trackable-type')
-            , trackableValue: trackElm.getAttribute('data-trackable-value')
-          }
-      )
+      trackTrackable('trackable-hover', trackElm)
     })
   })
 }
