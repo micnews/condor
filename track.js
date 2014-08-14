@@ -6,9 +6,11 @@ var addEventListener = require('add-event-listener')
 
   , slice = Array.prototype.slice
 
-  , Track = function () {
+  , Track = function (options) {
       if (!(this instanceof Track))
-        return new Track()
+        return new Track(options)
+
+      options = options || {}
 
       this._startTime = Date.now()
       this._windowWidth = []
@@ -17,6 +19,10 @@ var addEventListener = require('add-event-listener')
       this._resizeOffset = 0
       this.onevent = null
       this.onend = null
+
+      this._debounceTime = typeof(options.debounceTime) === 'number' ?
+        options.debounceTime : 500
+
       this._startTracking()
     }
   , isTrackable = function (elm) {
@@ -72,8 +78,8 @@ Track.prototype._startTracking = function () {
         if (self.onevent)
           self.onevent(csv)
       }
-    , trackScroll = debounce(track.bind(null, 'scroll'), 500)
-    , trackResize = debounce(track.bind(null, 'resize'), 500)
+    , trackScroll = debounce(track.bind(null, 'scroll'), this._debounceTime)
+    , trackResize = debounce(track.bind(null, 'resize'), this._debounceTime)
     , trackTrackable = function (eventType, elm) {
         track(
             eventType

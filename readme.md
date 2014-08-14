@@ -10,7 +10,11 @@ Running `node example/server.js` will start a server on `localhost:1234` that do
 
 ```js
 var xhr = require('xhr')
-  , track = require('../track')()
+  , track = require('../track')({
+        // default 500ms
+        // set for how long time scroll & resize events should be debounced
+        debounceTime: 300
+    })
 
   , noop = function () {}
 
