@@ -48,12 +48,12 @@ The callback to './track' gets called everytime a trackable event occur. _csv_ i
 Track is done in csv that corresponds to the following headers:
 
 ```
-event,windowWidth,windowHeight,scollX,scollY,location,offset,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
+eventName,windowWidth,windowHeight,scollX,scollY,location,offset,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
 ```
 
 If not explicitly written out, the columns are always included (when available). For example, there's always a column describing the width of the window and if a referrer exists that's also always included in the events.
 
-* __event__ Describes what event that has occured. Is one of the following:
+* __eventName__ Describes what event that has occured. Is one of the following:
   * __load__ Emitted when the page has loaded (_window.onload_)
   * __resize__ Emitted everytime a user resize the window (_window.onresize_). All resizing within 500ms are tracked as one resize-event.
   * __scroll__ Emitted everytime a user scroll. All scrolling within 500ms is tracked as one scoll-event.
