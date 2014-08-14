@@ -1,10 +1,11 @@
 var co = require('co')
   , test = require('tape')
-  , yiewd = require('yiewd')
 
   , server = require('./server')
 
-  , browser = yiewd.remote('http://localhost:9515')
+  , browser = require('./co-wd')(
+      require('wd').remote('http://localhost:9515')
+    )
 
   , untilEvent = function (desiredEventName) {
       return function (callback) {
@@ -18,38 +19,35 @@ var co = require('co')
     }
 
 test('setup server', function (t) {
-  server.listen(0, t.end.bind(t))
-  server.unref()
+  co(function* () {
+    yield server.listen.bind(server, '0')
+    server.unref()
+    t.end()
+  })()
 })
 
 test('setup webdriver', function (t) {
-  browser.run(function *() {
-    yield this.init()
-    yield this.get('http://localhost:' + server.address().port)
-
-    co(function *() {
-      yield untilEvent('load')
-      t.end()
-    })()
-  })
+  co(function* () {
+    yield browser.init()
+    yield browser.get('http://localhost:' + server.address().port)
+    yield untilEvent('load')
+    t.end()
+  })()
 })
 
 test('scroll', function (t) {
-  browser.run(function *() {
-    yield this.safeEval('window.scrollTo(0, 300)')
-
-    co(function *() {
-      var event = yield untilEvent('scroll')
-      t.equal(event.scrollX, '0')
-      t.equal(event.scrollY, '300')
-      t.end()
-    })()
-  })
+  co(function* () {
+    yield browser.safeEval('window.scrollTo(0, 300)')
+    var event = yield untilEvent('scroll')
+    t.equal(event.scrollX, '0')
+    t.equal(event.scrollY, '300')
+    t.end()
+  })()
 })
 
 test('shutdown', function (t) {
-  browser.run(function *() {
-    yield this.quit()
+  co(function *() {
+    yield browser.quit()
     t.end()
-  })
+  })()
 })
