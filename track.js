@@ -153,6 +153,20 @@ Track.prototype._startTracking = function () {
       )
     })
   })
+
+  addEventListener(document, 'mouseover', function (event) {
+    var elm = event.target
+
+    findTrackable(elm).forEach(function (trackElm) {
+      track(
+          'trackable-hover'
+        , {
+              trackableType: trackElm.getAttribute('data-trackable-type')
+            , trackableValue: trackElm.getAttribute('data-trackable-value')
+          }
+      )
+    })
+  })
 }
 
 module.exports = Track
