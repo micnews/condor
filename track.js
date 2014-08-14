@@ -80,6 +80,7 @@ Track.prototype._startTracking = function () {
           , {
                 trackableValue: elm.getAttribute('data-trackable-value')
               , trackableType: elm.getAttribute('data-trackable-type')
+              , path: getCssPath(elm)
             }
         )
       }
