@@ -15,7 +15,7 @@ var addEventListener = require('add-event-listener')
       this._windowHeight = []
       this._scrollOffset = 0
       this._resizeOffset = 0
-      this.ondata = null
+      this.onevent = null
       this.onend = null
       this._startTracking()
     }
@@ -69,8 +69,8 @@ Track.prototype._startTracking = function () {
     , track = function (eventType, extra, offset) {
         var csv = self._toCsv(eventType, extra, offset)
 
-        if (self.ondata)
-          self.ondata(csv)
+        if (self.onevent)
+          self.onevent(csv)
       }
     , trackScroll = debounce(track.bind(null, 'scroll'), 500)
     , trackResize = debounce(track.bind(null, 'resize'), 500)

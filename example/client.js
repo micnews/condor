@@ -18,7 +18,7 @@ var debounce = require('debounce')
       }, noop)
     }, 1000)
 
-track.ondata = function (csv) {
+track.onevent = function (csv) {
   data.push(csv)
   batchPost()
 }
