@@ -33,7 +33,7 @@ var addEventListener = require('add-event-listener')
       return trackable
     }
   , findAllTrackable = function () {
-      return slice.call(document.querySelectorAll('[data-trackable-type][data-trackable-value'))
+      return slice.call(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
     }
 
 Track.prototype._toCsv = function (eventType, extra, offset) {
