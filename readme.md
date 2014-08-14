@@ -74,8 +74,8 @@ If not explicitly written out, the columns are always included (when available).
 * __offset__ Time (in ms) that has gone by since tracking was initiated
 * __referrer__ The referrer header (_document.referrer_)
 * __path__ The css-path describing the DOM-element (if available). For _click_ events this is the element clicked, for _change_ events this is the element changed. For _trackable-*_ events this is the trackable element.
-* __clickX__ The x-coordinate on the page that was clicked. Only applicable for _click_ events.
-* __clickY__ The y-coordinate on the page that was clicked. Only applicable for _click_ events.
+* __clickX__ The x-coordinate on the page that was clicked (_event.pageX_). Only applicable for _click_ events.
+* __clickY__ The y-coordinate on the page that was clicked (_event.pageY_). Only applicable for _click_ events.
 * __href__ The href-attribute on the a DOM-element associated with the DOM-element that was clicked. Only applicable for _click_ events.
 * __target__ The target-attribute on the a DOM-element associated with the DOM-element that was clicked. Only applicable for _click_ events.
 * __visibility__ String describing if the page was visible or not. Can be one of `visible` or `hidden`. Only applicable for _visibility_ events.

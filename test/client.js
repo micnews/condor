@@ -11,7 +11,7 @@ tracking.onevent = function (csv) {
   }, function () {})
 }
 
-tracking.onend = function (event) {
+tracking.onend = function (csv) {
   xhr({
       method: 'post'
     , body: csv

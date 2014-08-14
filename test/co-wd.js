@@ -1,8 +1,14 @@
 // TODO: wrap up and release as own library
 
 var thunkify = require('thunkify')
+
+  , methods = [
+        'init', 'get', 'quit', 'safeEval', 'elementByCssSelector'
+      , 'clickElement'
+    ]
+
   , wrap = function (browser) {
-      return ['init', 'get', 'quit', 'safeEval'].reduce(function (obj, fun) {
+      return methods.reduce(function (obj, fun) {
         obj[fun] = thunkify(browser[fun].bind(browser))
 
         return obj

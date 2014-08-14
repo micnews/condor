@@ -167,7 +167,13 @@ Track.prototype._startTracking = function () {
         })(elm)
       , href = aElm ? aElm.getAttribute('href') : undefined
       , target = aElm ? aElm.getAttribute('target') : undefined
-      , extra = { path: path, event: event.screenX, screenY: event.screenY, href: href, target: target }
+      , extra = {
+            path: path
+          , clickX: event.pageX
+          , clickY: event.pageY
+          , href: href
+          , target: target
+        }
 
     track('click', extra)
 
