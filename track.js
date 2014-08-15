@@ -1,4 +1,5 @@
 var addEventListener = require('add-event-listener')
+  , bind = require('component-bind')
   , debounce = require('debounce')
   , pageVisibility = require('page-visibility')
   , getCssPath = require('css-path')
@@ -83,8 +84,8 @@ Track.prototype._startTracking = function () {
         if (self.onevent)
           self.onevent(csv)
       }
-    , trackScroll = debounce(track.bind(null, 'scroll'), this._debounceTime)
-    , trackResize = debounce(track.bind(null, 'resize'), this._debounceTime)
+    , trackScroll = debounce(bind(null, track, 'scroll'), this._debounceTime)
+    , trackResize = debounce(bind(null, track, 'resize'), this._debounceTime)
     , trackTrackable = function (eventType, elm) {
         track(
             eventType
