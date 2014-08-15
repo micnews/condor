@@ -3,9 +3,8 @@ var addEventListener = require('add-event-listener')
   , debounce = require('debounce')
   , pageVisibility = require('page-visibility')
   , getCssPath = require('css-path')
+  , toArray = require('to-array')
   , toCsv = require('csv-line')({ escapeNewlines: true })
-
-  , slice = Array.prototype.slice
 
     // needed for IE8
   , now = function () {
@@ -45,7 +44,7 @@ var addEventListener = require('add-event-listener')
       return trackable
     }
   , findAllTrackable = function () {
-      return slice.call(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
+      return toArray(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
     }
 
 Track.prototype._toCsv = function (eventType, extra, offset) {
