@@ -160,7 +160,9 @@ Track.prototype._startTracking = function () {
   })
 
   addEventListener(document, 'click', function (event) {
-    var elm = event.target
+    event = event || window.event
+
+    var elm = event.target || event.srcElement
       , path = elm ? getCssPath(elm, document.body) : undefined
         // href & target is useful for a-element
         // if we're in a subelement, see if there's a parentNode that's
@@ -189,7 +191,9 @@ Track.prototype._startTracking = function () {
   })
 
   addEventListener(document, 'mouseover', function (event) {
-    var elm = event.target
+    event = event || window.event
+
+    var elm = event.target || event.srcElement
 
     forEach(findTrackable(elm), function (trackElm) {
       trackTrackable('trackable-hover', trackElm)
