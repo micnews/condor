@@ -6,13 +6,18 @@ var addEventListener = require('add-event-listener')
 
   , slice = Array.prototype.slice
 
+    // needed for IE8
+  , now = function () {
+      return Date.now ? Date.now() : (new Date()).getTime()
+    }
+
   , Track = function (options) {
       if (!(this instanceof Track))
         return new Track(options)
 
       options = options || {}
 
-      this._startTime = Date.now()
+      this._startTime = now()
       this._windowWidth = []
       this._windowHeight = []
       this._scrollOffset = 0
@@ -43,7 +48,7 @@ var addEventListener = require('add-event-listener')
     }
 
 Track.prototype._toCsv = function (eventType, extra, offset) {
-  offset = typeof(offset) === 'number' ? offset : Date.now() - this._startTime
+  offset = typeof(offset) === 'number' ? offset : now() - this._startTime
 
   extra = extra || {}
 
@@ -105,13 +110,13 @@ Track.prototype._startTracking = function () {
     if (window.innerWidth !== self._windowWidth || window.innerHeight !== self._windowHeight) {
       self._windowWidth = window.innerWidth
       self._windowHeight = window.innerHeight
-      self._resizeOffset = Date.now() - self._startTime
+      self._resizeOffset = now() - self._startTime
       trackResize()
     }
   })
 
   addEventListener(window, 'scroll', function () {
-    self._scrollOffset = Date.now() - self._startTime
+    self._scrollOffset = now() - self._startTime
 
     trackVisibleTrackingElements()
 
