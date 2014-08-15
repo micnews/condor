@@ -2,6 +2,7 @@ var addEventListener = require('add-event-listener')
   , bind = require('component-bind')
   , debounce = require('debounce')
   , pageVisibility = require('page-visibility')
+  , forEach = require('for-each')
   , getCssPath = require('css-path')
   , toArray = require('to-array')
   , toCsv = require('csv-line')({ escapeNewlines: true })
@@ -96,7 +97,7 @@ Track.prototype._startTracking = function () {
         )
       }
     , trackVisibleTrackingElements = function () {
-        findAllTrackable().forEach(function (elm) {
+        forEach(findAllTrackable(), function (elm) {
           if (elm.getBoundingClientRect().top < window.innerHeight && !elm.trackedVisibility) {
             elm.trackedVisibility = true
             trackTrackable('trackable-visible', elm)
@@ -132,7 +133,7 @@ Track.prototype._startTracking = function () {
   addEventListener(window, 'load', function () {
     track('load')
 
-    findAllTrackable().forEach(function (elm) {
+    forEach(findAllTrackable(), function (elm) {
       trackTrackable('trackable-load', elm)
     })
 
@@ -182,7 +183,7 @@ Track.prototype._startTracking = function () {
 
     track('click', extra)
 
-    findTrackable(elm).forEach(function (trackElm) {
+    forEach(findTrackable(elm), function (trackElm) {
       trackTrackable('trackable-click', trackElm)
     })
   })
@@ -190,7 +191,7 @@ Track.prototype._startTracking = function () {
   addEventListener(document, 'mouseover', function (event) {
     var elm = event.target
 
-    findTrackable(elm).forEach(function (trackElm) {
+    forEach(findTrackable(elm), function (trackElm) {
       trackTrackable('trackable-hover', trackElm)
     })
   })
