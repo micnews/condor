@@ -29,8 +29,29 @@ test('setup server', function (t) {
 test('setup webdriver', function (t) {
   co(function* () {
     yield browser.init()
+    t.end()
+  })()
+})
+
+test('load', function (t) {
+  co(function* () {
     yield browser.get('http://localhost:' + port)
-    yield waitForEvent('load')
+    var event = yield waitForEvent('load')
+
+    t.equal(event.scrollX, '0', 'scrollX is 0')
+    t.equal(event.scrollY, '0', 'scrollY is 0')
+    t.equal(event.location, 'http://localhost:' + port + '/', 'correct location')
+    t.ok(/^[0-9]+$/.test(event.windowWidth), 'windowWidth is a number')
+    t.ok(/^[0-9]+$/.test(event.windowHeight), 'windowHeight is a number')
+    t.ok(/^[0-9]+$/.test(event.offset), 'offset is a number')
+
+    ;[
+        'referrer', 'path', 'clickX', 'clickY', 'href', 'target', 'visibility'
+      , 'name', 'trackableType', 'trackableValue'
+    ].forEach(function (key) {
+      t.equal(event[key], '', key + ' is empty')
+    })
+
     t.end()
   })()
 })
