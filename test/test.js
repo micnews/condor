@@ -3,9 +3,7 @@ var co = require('co')
 
   , server = require('./server')
 
-  , browser = require('./co-wd')(
-      require('wd').remote('http://localhost:9515')
-    )
+  , browser = require('co-wd').remote('http://localhost:9515')
 
   , waitForEvent = function (desiredEventName) {
       return function (callback) {
