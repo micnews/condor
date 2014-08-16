@@ -13,7 +13,7 @@
   "devDependencies": {
     "co-wd": "^1.0.0",
     "csv-parser": "^1.4.4",
-    "gap": "git://github.com/kesla/gap#gnode-compability",
+    "gap": "^0.1.1",
     "gnode": "0.0.8"
   }
 }
