@@ -1,4 +1,7 @@
-var paramify = require('paramify')
+var fs = require('fs')
+
+  , mime = require('mime')
+  , paramify = require('paramify')
   , serveBrowserify = require('serve-browserify')({
         root: __dirname
       , debug: true
@@ -6,10 +9,22 @@ var paramify = require('paramify')
     })
   , count = 0
   , headers = [
-        'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY', 'location'
-      , 'offset', 'referrer', 'path', 'clickX', 'clickY', 'href', 'target'
-      , 'visibility', 'name', 'trackableType', 'trackableValue'
+        'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY'
+      , 'location' , 'offset', 'referrer', 'path', 'clickX', 'clickY', 'href'
+      , 'target', 'visibility', 'name', 'trackableType', 'trackableValue'
     ].join(',')
+
+    // serve the file, default to index.html
+  , serveStatic = function (filename, res) {
+      fs.readFile(__dirname + '/static/' + filename, function (err, file) {
+        if (err) {
+          serveStatic('index.html', res)
+        } else {
+          res.setHeader('content-type', mime.lookup(filename))
+          res.end(file)
+        }
+      })
+    }
 
   , server = require('http').createServer(function (req, res) {
       var match = paramify(req.url)
@@ -20,15 +35,11 @@ var paramify = require('paramify')
           server.eventStream.write(new Buffer('\n'))
         })
         req.once('end', res.end.bind(res))
-      } if (match('client.js'))
+      } else if (match('client.js')) {
         serveBrowserify(req, res)
-
-      else
-        require('fs').readFile(__dirname + '/index.html', function (err, html) {
-          res.writeHeader({ 'content-type': 'text/html' })
-          res.end(html)
-        })
-
+      } else {
+        serveStatic(req.url, res)
+      }
     })
 
 server.eventStream = require('csv-parser')()
