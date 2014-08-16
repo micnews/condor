@@ -5,16 +5,41 @@
     "css-path": "^1.0.0",
     "csv-line": "^1.1.0",
     "debounce": "^1.0.0",
-    "page-visibility": "^1.0.1",
-    "paramify": "^0.1.2",
-    "serve-browserify": "^0.3.3",
-    "xhr": "^1.14.1"
+    "page-visibility": "^1.0.1"
   },
   "devDependencies": {
     "co-wd": "^1.0.0",
     "csv-parser": "^1.4.4",
     "gap": "^0.1.1",
     "gnode": "0.0.8",
-    "mime": "^1.2.11"
-  }
+    "mime": "^1.2.11",
+    "paramify": "^0.1.2",
+    "serve-browserify": "^0.3.3",
+    "xhr": "^1.14.1"
+  },
+  "description": "Track what a user does on a site in csv-format",
+  "version": "0.0.0",
+  "main": "track.js",
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/micnews/tracking-script.git"
+  },
+  "keywords": [
+    "tracking",
+    "browserify",
+    "browser"
+  ],
+  "author": "David Björklund <david.bjorklund@gmail.com> (http://mic.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/micnews/tracking-script/issues"
+  },
+  "homepage": "https://github.com/micnews/tracking-script"
 }
