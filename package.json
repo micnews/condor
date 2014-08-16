@@ -11,7 +11,7 @@
     "paramify": "^0.1.2",
     "serve-browserify": "^0.3.3",
     "to-array": "^0.1.4",
-    "xhr": "^1.14.1"
+    "xhr": "git://github.com/kesla/xhr#ie8-support"
   },
   "devDependencies": {
     "co-wd": "^1.0.0",
