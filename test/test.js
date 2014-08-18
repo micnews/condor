@@ -1,29 +1,17 @@
 var test = require('gap')
 
-  , server = require('./server')
+  , utils = require('./utils')
+
+  , server = utils.createServer()
 
   , browser = require('co-wd').remote('http://localhost:9515')
 
-  , waitForEvent = function (desiredEventName) {
-      return function (callback) {
-        server.eventStream.on('data', function onEvent (data) {
-          if (data.eventName === desiredEventName) {
-            server.eventStream.removeListener('data', onEvent)
-            callback(null, data)
-          }
-        })
-      }
-    }
+  , waitForEvent = utils.waitForEvent(server.eventStream)
   , port
 
-test('setup server', function* (t) {
-  yield server.listen.bind(server, '0')
+test('setup', function* (t) {
+  yield utils.setup(server, browser)
   port = server.address().port
-  server.unref()
-})
-
-test('setup webdriver', function* (t) {
-  yield browser.init()
 })
 
 test('load', function* (t) {
@@ -72,5 +60,5 @@ test('click on a link to a new page', function* (t) {
 })
 
 test('shutdown', function* (t) {
-  yield browser.quit()
+  yield utils.shutdown(server, browser)
 })

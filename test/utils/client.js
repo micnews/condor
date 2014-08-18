@@ -1,6 +1,6 @@
 // this file will be browserified
 
-var tracking = require('../track')()
+var tracking = require('../../track')()
   , xhr = require('xhr')
 
 tracking.onevent = function (csv) {

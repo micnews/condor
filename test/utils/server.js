@@ -25,24 +25,26 @@ var fs = require('fs')
         }
       })
     }
+  , createServer = function () {
+      var server = require('http').createServer(function (req, res) {
+            var match = paramify(req.url)
 
-  , server = require('http').createServer(function (req, res) {
-      var match = paramify(req.url)
+            if (req.method === 'POST') {
+              req.on('data', function (chunk) {
+                server.eventStream.write(chunk)
+                server.eventStream.write(new Buffer('\n'))
+              })
+              req.once('end', res.end.bind(res))
+            } else if (match('client.js')) {
+              serveBrowserify(req, res)
+            } else {
+              serveStatic(req.url, res)
+            }
+          })
 
-      if (req.method === 'POST') {
-        req.on('data', function (chunk) {
-          server.eventStream.write(chunk)
-          server.eventStream.write(new Buffer('\n'))
-        })
-        req.once('end', res.end.bind(res))
-      } else if (match('client.js')) {
-        serveBrowserify(req, res)
-      } else {
-        serveStatic(req.url, res)
-      }
-    })
+      server.eventStream = require('csv-parser')()
+      server.eventStream.write(new Buffer(headers + '\n'))
+      return server
+    }
 
-server.eventStream = require('csv-parser')()
-server.eventStream.write(new Buffer(headers + '\n'))
-
-module.exports = server
+module.exports = createServer
