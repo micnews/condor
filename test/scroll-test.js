@@ -12,8 +12,7 @@ var test = require('gap')
 test('setup', function* (t) {
   yield utils.setup(server, browser)
   port = server.address().port
-  yield browser.get('http://localhost:' + port)
-  yield waitForEvent('load')
+  yield [ browser.get('http://localhost:' + port), waitForEvent('load') ]
 })
 
 test('scroll', function* (t) {
