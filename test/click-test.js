@@ -12,32 +12,8 @@ var test = require('gap')
 test('setup', function* (t) {
   yield utils.setup(server, browser)
   port = server.address().port
-})
-
-test('load', function* (t) {
   yield browser.get('http://localhost:' + port)
-  var event = yield waitForEvent('load')
-
-  t.equal(event.scrollX, '0', 'scrollX is 0')
-  t.equal(event.scrollY, '0', 'scrollY is 0')
-  t.equal(event.location, 'http://localhost:' + port + '/', 'correct location')
-  t.ok(/^[0-9]+$/.test(event.windowWidth), 'windowWidth is a number')
-  t.ok(/^[0-9]+$/.test(event.windowHeight), 'windowHeight is a number')
-  t.ok(/^[0-9]+$/.test(event.offset), 'offset is a number')
-
-  ;[
-      'referrer', 'path', 'clickX', 'clickY', 'href', 'target', 'visibility'
-    , 'name', 'trackableType', 'trackableValue'
-  ].forEach(function (key) {
-    t.equal(event[key], '', key + ' is empty')
-  })
-})
-
-test('scroll', function* (t) {
-  yield browser.safeEval('window.scrollTo(0, 300)')
-  var event = yield waitForEvent('scroll')
-  t.equal(event.scrollX, '0')
-  t.equal(event.scrollY, '300')
+  yield waitForEvent('load')
 })
 
 test('click on a link to a new page', function* (t) {

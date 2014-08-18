@@ -1,3 +1,5 @@
 require('gnode')
 
-require('./test')
+require('./load-test')
+require('./scroll-test')
+require('./click-test')
