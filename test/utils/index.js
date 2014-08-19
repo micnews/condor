@@ -24,6 +24,9 @@ var utils = {
             yield server.close.bind(server)
           }
         }
+      , isNumber: function (string) {
+          return /^[0-9]+$/.test(string)
+        }
     }
 
 module.exports = utils

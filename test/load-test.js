@@ -21,9 +21,11 @@ test('load', function* (t) {
   t.equal(event.scrollX, '0', 'scrollX is 0')
   t.equal(event.scrollY, '0', 'scrollY is 0')
   t.equal(event.location, 'http://localhost:' + port + '/', 'correct location')
-  t.ok(/^[0-9]+$/.test(event.windowWidth), 'windowWidth is a number')
-  t.ok(/^[0-9]+$/.test(event.windowHeight), 'windowHeight is a number')
-  t.ok(/^[0-9]+$/.test(event.duration), 'duration is a number')
+  t.ok(utils.isNumber(event.windowWidth), 'windowWidth is a number')
+  t.ok(utils.isNumber(event.windowHeight), 'windowHeight is a number')
+  t.ok(utils.isNumber(event.duration), 'duration is a number')
+  t.notOk(isNaN(new Date(event.timestamp)), 'timestamp is a valid date')
+  t.ok(utils.isNumber(event.timezone), 'timezone is a number')
 
   ;[
       'referrer', 'path', 'clickX', 'clickY', 'href', 'target', 'visibility'

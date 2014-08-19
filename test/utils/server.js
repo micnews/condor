@@ -10,8 +10,9 @@ var fs = require('fs')
   , count = 0
   , headers = [
         'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY'
-      , 'location' , 'duration', 'referrer', 'path', 'clickX', 'clickY', 'href'
-      , 'target', 'visibility', 'name', 'trackableType', 'trackableValue'
+      , 'location' , 'duration', 'timestamp', 'timezone', 'referrer', 'path'
+      , 'clickX', 'clickY', 'href', 'target', 'visibility', 'name'
+      , 'trackableType', 'trackableValue'
     ].join(',')
 
     // serve the file, default to index.html

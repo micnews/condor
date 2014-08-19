@@ -19,6 +19,7 @@ var addEventListener = require('add-event-listener')
       options = options || {}
 
       this._startTime = now()
+      this._timezone = (new Date()).getTimezoneOffset()
       this._windowWidth = []
       this._windowHeight = []
       this._scrollOffset = 0
@@ -61,6 +62,8 @@ Condor.prototype._toCsv = function (eventType, extra, duration) {
         , window.scrollY
         , window.location.toString()
         , duration
+        , (new Date()).toUTCString()
+        , this._timezone
         , document.referrer
         , extra.path
         , extra.clickX
