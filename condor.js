@@ -12,9 +12,9 @@ var addEventListener = require('add-event-listener')
       return Date.now ? Date.now() : (new Date()).getTime()
     }
 
-  , Track = function (options) {
-      if (!(this instanceof Track))
-        return new Track(options)
+  , Condor = function (options) {
+      if (!(this instanceof Condor))
+        return new Condor(options)
 
       options = options || {}
 
@@ -48,7 +48,7 @@ var addEventListener = require('add-event-listener')
       return toArray(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
     }
 
-Track.prototype._toCsv = function (eventType, extra, offset) {
+Condor.prototype._toCsv = function (eventType, extra, offset) {
   offset = typeof(offset) === 'number' ? offset : now() - this._startTime
 
   extra = extra || {}
@@ -76,7 +76,7 @@ Track.prototype._toCsv = function (eventType, extra, offset) {
   return toCsv(array)
 }
 
-Track.prototype._startTracking = function () {
+Condor.prototype._startTracking = function () {
   var self = this
     , track = function (eventType, extra, offset) {
         var csv = self._toCsv(eventType, extra, offset)
@@ -201,4 +201,4 @@ Track.prototype._startTracking = function () {
   })
 }
 
-module.exports = Track
+module.exports = Condor

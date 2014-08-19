@@ -1,5 +1,5 @@
 {
-  "name": "tracking-script",
+  "name": "condor",
   "dependencies": {
     "add-event-listener": "0.0.1",
     "component-bind": "^1.0.0",
@@ -25,7 +25,7 @@
   },
   "description": "Track what a user does on a site in csv-format",
   "version": "0.0.0",
-  "main": "track.js",
+  "main": "condor.js",
   "directories": {
     "example": "example",
     "test": "test"
@@ -35,17 +35,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/micnews/tracking-script.git"
+    "url": "https://github.com/micnews/condor.git"
   },
   "keywords": [
     "tracking",
     "browserify",
-    "browser"
+    "browser",
+    "condor"
   ],
   "author": "David Björklund <david.bjorklund@gmail.com> (http://mic.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/micnews/tracking-script/issues"
+    "url": "https://github.com/micnews/condor/issues"
   },
-  "homepage": "https://github.com/micnews/tracking-script"
+  "homepage": "https://github.com/micnews/condor"
 }

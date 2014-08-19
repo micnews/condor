@@ -1,6 +1,6 @@
 var debounce = require('debounce')
   , xhr = require('xhr')
-  , track = require('../track')()
+  , condor = require('../condor')()
 
   , noop = function () {}
   , data = []
@@ -14,17 +14,17 @@ var debounce = require('debounce')
       xhr({
           method: 'POST'
         , body: body
-        , uri: '/track'
+        , uri: '/condor'
       }, noop)
     }, 1000)
 
-track.onevent = function (csv) {
+condor.onevent = function (csv) {
   data.push(csv)
   batchPost()
 }
 
 // this gets called by beforeunload - so anything in here must be synchronous
-track.onend = function (csv) {
+condor.onend = function (csv) {
   data.push(csv)
 
   // this will be an end-event - meaning that the visit on the page has ended

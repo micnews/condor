@@ -1,9 +1,9 @@
 // this file will be browserified
 
-var tracking = require('../track')()
+var condor = require('../condor')()
   , xhr = require('xhr')
 
-tracking.onevent = function (csv) {
+condor.onevent = function (csv) {
   xhr({
       method: 'post'
     , body: csv
@@ -11,7 +11,7 @@ tracking.onevent = function (csv) {
   }, function () {})
 }
 
-tracking.onend = function (csv) {
+condor.onend = function (csv) {
   xhr({
       method: 'post'
     , body: csv
