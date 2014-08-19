@@ -48,8 +48,8 @@ var addEventListener = require('add-event-listener')
       return toArray(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
     }
 
-Condor.prototype._toCsv = function (eventType, extra, offset) {
-  offset = typeof(offset) === 'number' ? offset : now() - this._startTime
+Condor.prototype._toCsv = function (eventType, extra, duration) {
+  duration = typeof(duration) === 'number' ? duration : now() - this._startTime
 
   extra = extra || {}
 
@@ -60,7 +60,7 @@ Condor.prototype._toCsv = function (eventType, extra, offset) {
         , window.scrollX
         , window.scrollY
         , window.location.toString()
-        , offset
+        , duration
         , document.referrer
         , extra.path
         , extra.clickX
@@ -78,8 +78,8 @@ Condor.prototype._toCsv = function (eventType, extra, offset) {
 
 Condor.prototype._startTracking = function () {
   var self = this
-    , track = function (eventType, extra, offset) {
-        var csv = self._toCsv(eventType, extra, offset)
+    , track = function (eventType, extra, duration) {
+        var csv = self._toCsv(eventType, extra, duration)
 
         if (self.onevent)
           self.onevent(csv)
@@ -125,7 +125,7 @@ Condor.prototype._startTracking = function () {
   })
 
   pageVisibility(function (visible) {
-    // getting the visibility make take some time, but the  offset should be 0
+    // getting the visibility make take some time, but the  duration should be 0
     // - it's the visibiltiy that existed when the page was loaded
     track('visibility', { visibility: visible ? 'visible' : 'hidden' }, 0 )
   })

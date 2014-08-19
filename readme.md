@@ -48,7 +48,7 @@ The callback to './track' gets called everytime a trackable event occur. _csv_ i
 Track is done in csv that corresponds to the following headers:
 
 ```
-eventName,windowWidth,windowHeight,scrollX,scrollY,location,offset,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
+eventName,windowWidth,windowHeight,scrollX,scrollY,location,duration,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
 ```
 
 If not explicitly written out, the columns are always included (when available). For example, there's always a column describing the width of the window and if a referrer exists that's also always included in the events.
@@ -57,7 +57,7 @@ If not explicitly written out, the columns are always included (when available).
   * __load__ Emitted when the page has loaded (_window.onload_)
   * __resize__ Emitted everytime a user resize the window (_window.onresize_). All resizing within 500ms are tracked as one resize-event.
   * __scroll__ Emitted everytime a user scroll. All scrolling within 500ms is tracked as one scoll-event.
-  * __visibility__ Event describing if the page is visible or not. The initial visibility (when the script was loaded) will have offset 0.
+  * __visibility__ Event describing if the page is visible or not. The initial visibility (when the script was loaded) will have duration 0.
   * __change__ Emitted when a user changes a form (_document.onchange_)
   * __click__ Emitted when a user clicks on the page
   * __end__ Emitted when a user ends its session on a page, e.g. closes the window or click on a link.
@@ -71,7 +71,7 @@ If not explicitly written out, the columns are always included (when available).
 * __scrollX__ How far the user has scrolled (horizontally)
 * __scrollY__ How far the user has scrolled (vertically)
 * __location__ The page the user is on (_window.location_)
-* __offset__ Time (in ms) that has gone by since tracking was initiated
+* __duration__ Time (in ms) that has gone by since tracking was initiated
 * __referrer__ The referrer header (_document.referrer_)
 * __path__ The css-path describing the DOM-element (if available). For _click_ events this is the element clicked, for _change_ events this is the element changed. For _trackable-*_ events this is the trackable element.
 * __clickX__ The x-coordinate on the page that was clicked (_event.pageX_). Only applicable for _click_ events.

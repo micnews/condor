@@ -23,7 +23,7 @@ test('load', function* (t) {
   t.equal(event.location, 'http://localhost:' + port + '/', 'correct location')
   t.ok(/^[0-9]+$/.test(event.windowWidth), 'windowWidth is a number')
   t.ok(/^[0-9]+$/.test(event.windowHeight), 'windowHeight is a number')
-  t.ok(/^[0-9]+$/.test(event.offset), 'offset is a number')
+  t.ok(/^[0-9]+$/.test(event.duration), 'duration is a number')
 
   ;[
       'referrer', 'path', 'clickX', 'clickY', 'href', 'target', 'visibility'

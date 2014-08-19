@@ -10,7 +10,7 @@ var fs = require('fs')
   , count = 0
   , headers = [
         'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY'
-      , 'location' , 'offset', 'referrer', 'path', 'clickX', 'clickY', 'href'
+      , 'location' , 'duration', 'referrer', 'path', 'clickX', 'clickY', 'href'
       , 'target', 'visibility', 'name', 'trackableType', 'trackableValue'
     ].join(',')
 

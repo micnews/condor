@@ -24,7 +24,7 @@ test('click on a link to a new page', function* (t) {
         , action: browser.clickElement(link)
       }
 
-  t.ok(events.click.offset <= events.end.offset, 'click event occurs before end')
+  t.ok(events.click.duration <= events.end.duration, 'click event occurs before end')
   t.notEqual(events.click.clickX, '', 'clickEvent: clickX is set')
   t.notEqual(events.click.clickY, '', 'clickEvent: clickY is set')
   t.equal(events.click.href, '/beep-boop', 'clickEvent: href is correct')
