@@ -12,7 +12,10 @@ Running `node example/server.js` will start a server on `localhost:1234` that do
 var xhr = require('xhr')
   , track = require('../condor')({
         // default 500ms
-        // set for how long time scroll & resize events should be debounced
+        // set for how long time scroll & resize events should be
+        // [debounced](https://www.npmjs.org/package/debounce)
+        // The `duration`-attribute is the last of these events.
+
         debounceTime: 300
     })
 
