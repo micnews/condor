@@ -1,10 +1,16 @@
 var addEventListener = require('add-event-listener')
+  , bind = require('component-bind')
   , debounce = require('debounce')
   , pageVisibility = require('page-visibility')
+  , forEach = require('for-each')
   , getCssPath = require('css-path')
+  , toArray = require('to-array')
   , toCsv = require('csv-line')({ escapeNewlines: true })
 
-  , slice = Array.prototype.slice
+    // needed for IE8
+  , now = function () {
+      return Date.now ? Date.now() : (new Date()).getTime()
+    }
 
   , Track = function (options) {
       if (!(this instanceof Track))
@@ -12,7 +18,7 @@ var addEventListener = require('add-event-listener')
 
       options = options || {}
 
-      this._startTime = Date.now()
+      this._startTime = now()
       this._windowWidth = []
       this._windowHeight = []
       this._scrollOffset = 0
@@ -39,11 +45,11 @@ var addEventListener = require('add-event-listener')
       return trackable
     }
   , findAllTrackable = function () {
-      return slice.call(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
+      return toArray(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
     }
 
 Track.prototype._toCsv = function (eventType, extra, offset) {
-  offset = typeof(offset) === 'number' ? offset : Date.now() - this._startTime
+  offset = typeof(offset) === 'number' ? offset : now() - this._startTime
 
   extra = extra || {}
 
@@ -78,8 +84,8 @@ Track.prototype._startTracking = function () {
         if (self.onevent)
           self.onevent(csv)
       }
-    , trackScroll = debounce(track.bind(null, 'scroll'), this._debounceTime)
-    , trackResize = debounce(track.bind(null, 'resize'), this._debounceTime)
+    , trackScroll = debounce(bind(null, track, 'scroll'), this._debounceTime)
+    , trackResize = debounce(bind(null, track, 'resize'), this._debounceTime)
     , trackTrackable = function (eventType, elm) {
         track(
             eventType
@@ -91,7 +97,7 @@ Track.prototype._startTracking = function () {
         )
       }
     , trackVisibleTrackingElements = function () {
-        findAllTrackable().forEach(function (elm) {
+        forEach(findAllTrackable(), function (elm) {
           if (elm.getBoundingClientRect().top < window.innerHeight && !elm.trackedVisibility) {
             elm.trackedVisibility = true
             trackTrackable('trackable-visible', elm)
@@ -105,13 +111,13 @@ Track.prototype._startTracking = function () {
     if (window.innerWidth !== self._windowWidth || window.innerHeight !== self._windowHeight) {
       self._windowWidth = window.innerWidth
       self._windowHeight = window.innerHeight
-      self._resizeOffset = Date.now() - self._startTime
+      self._resizeOffset = now() - self._startTime
       trackResize()
     }
   })
 
   addEventListener(window, 'scroll', function () {
-    self._scrollOffset = Date.now() - self._startTime
+    self._scrollOffset = now() - self._startTime
 
     trackVisibleTrackingElements()
 
@@ -127,7 +133,7 @@ Track.prototype._startTracking = function () {
   addEventListener(window, 'load', function () {
     track('load')
 
-    findAllTrackable().forEach(function (elm) {
+    forEach(findAllTrackable(), function (elm) {
       trackTrackable('trackable-load', elm)
     })
 
@@ -154,7 +160,9 @@ Track.prototype._startTracking = function () {
   })
 
   addEventListener(document, 'click', function (event) {
-    var elm = event.target
+    event = event || window.event
+
+    var elm = event.target || event.srcElement
       , path = elm ? getCssPath(elm, document.body) : undefined
         // href & target is useful for a-element
         // if we're in a subelement, see if there's a parentNode that's
@@ -177,15 +185,17 @@ Track.prototype._startTracking = function () {
 
     track('click', extra)
 
-    findTrackable(elm).forEach(function (trackElm) {
+    forEach(findTrackable(elm), function (trackElm) {
       trackTrackable('trackable-click', trackElm)
     })
   })
 
   addEventListener(document, 'mouseover', function (event) {
-    var elm = event.target
+    event = event || window.event
 
-    findTrackable(elm).forEach(function (trackElm) {
+    var elm = event.target || event.srcElement
+
+    forEach(findTrackable(elm), function (trackElm) {
       trackTrackable('trackable-hover', trackElm)
     })
   })

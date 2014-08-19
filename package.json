@@ -2,13 +2,16 @@
   "name": "tracking-script",
   "dependencies": {
     "add-event-listener": "0.0.1",
+    "component-bind": "^1.0.0",
     "css-path": "^1.0.0",
     "csv-line": "^1.1.0",
     "debounce": "^1.0.0",
+    "for-each": "^0.3.2",
     "page-visibility": "^1.0.1",
     "paramify": "^0.1.2",
     "serve-browserify": "^0.3.3",
-    "xhr": "^1.14.1"
+    "to-array": "^0.1.4",
+    "xhr": "git://github.com/kesla/xhr#ie8-support"
   },
   "devDependencies": {
     "co-wd": "^1.0.0",
