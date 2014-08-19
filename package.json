@@ -24,7 +24,7 @@
     "xhr": "^1.14.1"
   },
   "description": "Track what a user does on a site in csv-format",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "condor.js",
   "directories": {
     "example": "example",
