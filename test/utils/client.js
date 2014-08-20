@@ -8,6 +8,7 @@ condor.onevent = function (csv) {
       method: 'post'
     , body: csv
     , uri: '/track'
+    , response: true
   }, function () {})
 }
 
@@ -17,5 +18,6 @@ condor.onend = function (csv) {
     , body: csv
     , uri: '/track'
     , sync: true
+    , response: true
   }, function () {})
 }

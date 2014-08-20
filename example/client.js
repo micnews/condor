@@ -15,6 +15,7 @@ var debounce = require('debounce')
           method: 'POST'
         , body: body
         , uri: '/condor'
+        , response: true
       }, noop)
     }, 1000)
 
@@ -33,5 +34,6 @@ condor.onend = function (csv) {
     , body: data.join('\n')
     , uri: '/track'
     , sync: true
+    , response: true
   }, noop)
 }

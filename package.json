@@ -10,8 +10,7 @@
     "page-visibility": "^1.0.1",
     "paramify": "^0.1.2",
     "serve-browserify": "^0.3.3",
-    "to-array": "^0.1.4",
-    "xhr": "git://github.com/kesla/xhr#ie8-support"
+    "to-array": "^0.1.4"
   },
   "devDependencies": {
     "co-wd": "^1.0.0",
@@ -21,7 +20,7 @@
     "mime": "^1.2.11",
     "paramify": "^0.1.2",
     "serve-browserify": "^0.3.3",
-    "xhr": "^1.14.1"
+    "xhr": "^1.15.0"
   },
   "description": "Track what a user does on a site in csv-format",
   "version": "0.0.2",
