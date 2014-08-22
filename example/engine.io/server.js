@@ -6,12 +6,19 @@ var paramify = require('paramify')
     })
   , count = 0
 
+  , printCsv = function (csvLine) {
+      console.log(
+          'size: %sbytes\tcount: %s\tcsv: %s'
+        , csvLine.length, ++count, csvLine.toString()
+      )
+    }
+
   , httpServer = require('http').createServer(function (req, res) {
       var match = paramify(req.url)
 
       if (req.method === 'POST') {
         req.on('data', function (row) {
-          console.log(row.toString(), row.length, ++count)
+          printCsv(row)
         })
         req.once('end', res.end.bind(res))
       } else if (match('client.js')) {
@@ -27,7 +34,7 @@ var paramify = require('paramify')
 
 engineServer.on('connection', function (socket) {
   socket.on('message', function (row) {
-    console.log(row, row.length, ++count)
+    printCsv(row)
   })
 })
 
