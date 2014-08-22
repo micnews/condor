@@ -23,7 +23,7 @@ require('http').createServer(function (req, res) {
       })
     })
     req.once('end', res.end.bind(res))
-  } else if (match('client.js'))
+  } else if (match('client.js')) {
     serveBrowserify(req, res)
   } else {
     require('fs').readFile(__dirname + '/index.html', function (err, html) {
