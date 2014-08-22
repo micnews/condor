@@ -6,11 +6,7 @@ var addEventListener = require('add-event-listener')
   , getCssPath = require('css-path')
   , toArray = require('to-array')
   , toCsv = require('csv-line')({ escapeNewlines: true })
-
-    // needed for IE8
-  , now = function () {
-      return Date.now ? Date.now() : (new Date()).getTime()
-    }
+  , now = require('date-now')
 
   , Condor = function (options) {
       if (!(this instanceof Condor))
