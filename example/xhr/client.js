@@ -1,6 +1,6 @@
 var debounce = require('debounce')
   , xhr = require('xhr')
-  , condor = require('../condor')()
+  , condor = require('../../condor')()
 
   , noop = function () {}
   , data = []
