@@ -23,7 +23,7 @@ var paramify = require('paramify')
         })
       }
     })
-  , engineServer = require('engine.io').attach(httpServer, { transports: [ 'polling' ] })
+  , engineServer = require('engine.io').attach(httpServer)
 
 engineServer.on('connection', function (socket) {
   socket.on('message', function (row) {
