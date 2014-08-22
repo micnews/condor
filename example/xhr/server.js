@@ -17,14 +17,14 @@ require('http').createServer(function (req, res) {
       })
     })
     req.once('end', res.end.bind(res))
-  } if (match('client.js'))
+  } else if (match('client.js'))
     serveBrowserify(req, res)
-
-  else
+  } else {
     require('fs').readFile(__dirname + '/index.html', function (err, html) {
       res.writeHeader({ 'content-type': 'text/html' })
       res.end(html)
     })
+  }
 
 }).listen(1234, function () {
   console.log('example page loaded on port 1234')

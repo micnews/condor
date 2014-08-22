@@ -4,7 +4,7 @@ Track what a user does on a site in csv-format
 
 ## Example
 
-Running `node example/server.js` will start a server on `localhost:1234` that does POST requests whenever an event is tracked, and that event is then printed to the terminal
+See the example folder for examples of how to use condor.
 
 ## Usage
 
