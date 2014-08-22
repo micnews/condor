@@ -5,6 +5,12 @@ var paramify = require('paramify')
       , gzip: true
     })
   , count = 0
+  , printCsv = function (csvLine) {
+      console.log(
+          'size: %sbytes\tcount: %s\tcsv: %s'
+        , csvLine.length, ++count, csvLine.toString()
+      )
+    }
 
 require('http').createServer(function (req, res) {
   var match = paramify(req.url)
@@ -13,18 +19,18 @@ require('http').createServer(function (req, res) {
     req.on('data', function (chunk) {
       console.log('Got a batch of data, size: %s', chunk.length)
       chunk.toString().split('\n').forEach(function (row) {
-        console.log(row, row.length, ++count)
+        printCsv(row)
       })
     })
     req.once('end', res.end.bind(res))
-  } if (match('client.js'))
+  } else if (match('client.js')) {
     serveBrowserify(req, res)
-
-  else
+  } else {
     require('fs').readFile(__dirname + '/index.html', function (err, html) {
       res.writeHeader({ 'content-type': 'text/html' })
       res.end(html)
     })
+  }
 
 }).listen(1234, function () {
   console.log('example page loaded on port 1234')
