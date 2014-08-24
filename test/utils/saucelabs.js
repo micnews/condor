@@ -30,12 +30,11 @@ var flattenBrowser = require('zuul/lib/flatten_browser')
       return flattenBrowser(requestedBrowsers, available)
     }
 
-  , setupTunnel = function (callback) {
+  , setupTunnel = function* () {
       var tunnel = new SauceLabsTunnel();
-      tunnel.start().then(function () {
-        // interact with the WebDriver server at tunnel.clientUrl
-        callback(null, tunnel)
-      }, callback);
+      yield tunnel.start()
+
+      return tunnel
     }
 
 co(function* () {
@@ -44,10 +43,10 @@ co(function* () {
         , tunnel: setupTunnel
       }
 
-
+  console.log(setup)
 })()
 
-// 1. Get browsers to test & setup tunnel (in parallel)
+// 1. Get browsers to test & setup tunnel (in parallel) [done]
 // 2. Run tests somehow, perhaps by rurnnin each test in it's own process
 //    and save/parse each tap-output separatly
 //    TODO: think about a good way to now run to many tests in parallel,
