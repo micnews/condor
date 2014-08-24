@@ -16,7 +16,7 @@ var flattenBrowser = require('zuul/lib/flatten_browser')
       , 'opera/11.0..latest'
     ]
 
-  , getBrowsers = function (callback) {
+  , getBrowsers = function* () {
       var requestedBrowsers = browsersConf.map(function (row) {
             row = row.split('/')
 
@@ -25,13 +25,9 @@ var flattenBrowser = require('zuul/lib/flatten_browser')
               , version: row[1]
             }
           })
+        , available = yield scoutBrowser
 
-      scoutBrowser(function (err, available) {
-        if (err)
-          callback(err)
-        else
-          callback(null, flattenBrowser(requestedBrowsers, available))
-      })
+      return flattenBrowser(requestedBrowsers, available)
     }
 
   , setupTunnel = function (callback) {
