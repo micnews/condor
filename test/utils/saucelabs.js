@@ -3,6 +3,7 @@
 // these should probably be extracted to separate module
 var flattenBrowser = require('zuul/lib/flatten_browser')
   , scoutBrowser = require('zuul/lib/scout_browser')
+  , SauceLabsTunnel = require('digdug/SauceLabsTunnel')
 
     // borrowen naming from testling
     // TODO get this list from some config/specific repo
@@ -26,23 +27,29 @@ var flattenBrowser = require('zuul/lib/flatten_browser')
           })
 
       scoutBrowser(function (err, available) {
-        console.log('available', available)
-
-        var browsers = flattenBrowser(requestedBrowsers, available)
-
-        console.log('list of browsers')
-        console.log(browsers)
-
+        if (err)
+          callback(err)
+        else
+          callback(null, flattenBrowser(requestedBrowsers, available))
       })
     }
 
   , setupTunnel = function (callback) {
-
+      var tunnel = new SauceLabsTunnel();
+      tunnel.start().then(function () {
+        // interact with the WebDriver server at tunnel.clientUrl
+        callback(null, tunnel)
+      }, callback);
     }
 
-getBrowsers(function (err, browsers) {
-  console.log('browsers', browsers)
-})
+co(function* () {
+  var setup = yield {
+          browsers: getBrowsers
+        , tunnel: setupTunnel
+      }
+
+
+})()
 
 // 1. Get browsers to test & setup tunnel (in parallel)
 // 2. Run tests somehow, perhaps by rurnnin each test in it's own process
