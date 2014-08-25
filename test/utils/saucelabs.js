@@ -32,12 +32,14 @@ var flattenBrowser = require('zuul/lib/flatten_browser')
 
   , setupTunnel = function* () {
       var tunnel = new SauceLabsTunnel();
+      console.time('tunnel.start')
       yield tunnel.start()
+      console.timeEnd('tunnel.start')
 
       return tunnel
     }
 
-co(function* () {
+require('co')(function* () {
   var setup = yield {
           browsers: getBrowsers
         , tunnel: setupTunnel
