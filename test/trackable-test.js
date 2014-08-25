@@ -9,15 +9,17 @@ module.exports = function (server, browser) {
     var events = yield {
             action: browser.get(server.url + '/trackable.html')
           , load: function* () {
-              var events = []
-              for(var i = 0; i < 2; ++i)
-                events.push(yield waitForEvent('trackable-load'))
-              return events
+              var loadEvents = {}
+              for(var i = 0; i < 2; ++i) {
+                var event = yield waitForEvent('trackable-load')
+                loadEvents[event.trackableValue] = event
+              }
+              return loadEvents
             }
           , visible: waitForEvent('trackable-visible')
         }
-      , aboveTheFoldLoad = events.load[0]
-      , belowTheFoldLoad = events.load[1]
+      , aboveTheFoldLoad = events.load['above-the-fold']
+      , belowTheFoldLoad = events.load['below-the-fold']
       , aboveTheFoldVisible = events.visible
 
     t.equal(aboveTheFoldLoad.path, 'span#above-the-fold')

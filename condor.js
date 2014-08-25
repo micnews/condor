@@ -58,8 +58,11 @@ Condor.prototype._toCsv = function (eventType, extra, duration) {
           eventType
         , window.innerWidth
         , window.innerHeight
-        , window.scrollX
-        , window.scrollY
+        // pageXOffset & pageYOffset instead of scrollX/scrollY for browser
+        // compability
+        // https://developer.mozilla.org/en-US/docs/Web/API/Window.scrollX#Notes
+        , window.pageXOffset
+        , window.pageYOffset
         , window.location.toString()
         , duration
         , (new Date()).toUTCString()
