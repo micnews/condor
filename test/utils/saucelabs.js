@@ -12,7 +12,7 @@ var flattenBrowser = require('zuul/lib/flatten_browser')
       , 'chrome/latest'
       , 'firefox/latest'
       , 'safari/latest'
-      , 'opera/11.0..latest'
+      , 'opera/latest'
     ]
 
   , getBrowsers = function (callback) {
