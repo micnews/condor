@@ -5,22 +5,32 @@ var test = require('gap')
 
   , utils = require('./utils')
   , server = utils.createServer()
-    // TODO: use phantomjs for this somehow
-  , browser = require('co-wd').remote('http://localhost:9515')
+  , browser = require('co-wd').remote('ondemand.saucelabs.com', 80)
   , tests = require('bulk-require')(__dirname, [ '*-test.js' ])
   , tunnel
 
-test('init', function* (t) {
-  yield utils.setup(server, browser)
-  tunnel = yield localtunnel.bind(localtunnel, server.address().port)
-  server.url = tunnel.url
-})
+require('co')(function* () {
+  var browsers = yield require('./utils/saucelabs')
 
-Object.keys(tests).forEach(function (key) {
-  tests[key](server, browser)
-})
+  // TODO: run this in parallel
+  browsers.forEach(function (browserConfig) {
+    test('setup (' + browserConfig.name + ' ' + browserConfig.version + ')', function* () {
+      yield browser.init(browserConfig)
+      yield server.listen.bind(server, 0)
+      tunnel = yield localtunnel.bind(localtunnel, server.address().port)
+      server.url = tunnel.url
+    })
 
-test('teardown', function* (t) {
-  tunnel.close()
-  yield utils.shutdown(server, browser)
-})
+    Object.keys(tests).forEach(function (key) {
+      tests[key](server, browser)
+    })
+
+    test('teardown', function* () {
+      yield browser.quit()
+      tunnel.close()
+      server.close()
+    })
+  })
+
+
+})()
