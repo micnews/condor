@@ -25,7 +25,7 @@ var utils = {
           }
         }
       , isNumber: function (string) {
-          return /^[0-9]+$/.test(string)
+          return /^\-?[0-9]+$/.test(string)
         }
     }
 

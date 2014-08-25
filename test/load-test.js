@@ -2,39 +2,34 @@ var test = require('gap')
 
   , utils = require('./utils')
 
-  , server = utils.createServer()
+module.exports = function (server, browser) {
+  var waitForEvent = utils.waitForEvent(server.eventStream)
 
-  , browser = require('co-wd').remote('http://localhost:9515')
+  test('load', function* (t) {
+    var events = yield {
+            action: browser.get(server.url)
+          , load: waitForEvent('load')
+        }
+      , event = events.load
 
-  , waitForEvent = utils.waitForEvent(server.eventStream)
-  , port
+    t.equal(event.scrollX, '0', 'scrollX is 0')
+    t.equal(event.scrollY, '0', 'scrollY is 0')
+    t.equal(event.location, server.url + '/', 'correct location')
+    t.ok(utils.isNumber(event.windowWidth), 'windowWidth is a number')
+    t.ok(utils.isNumber(event.windowHeight), 'windowHeight is a number')
+    t.ok(utils.isNumber(event.duration), 'duration is a number')
+    t.notOk(isNaN(new Date(event.timestamp)), 'timestamp is a valid date')
+    t.ok(utils.isNumber(event.timezone), 'timezone is a number')
 
-test('setup', function* (t) {
-  yield utils.setup(server, browser)
-  port = server.address().port
-})
-
-test('load', function* (t) {
-  yield browser.get('http://localhost:' + port)
-  var event = yield waitForEvent('load')
-
-  t.equal(event.scrollX, '0', 'scrollX is 0')
-  t.equal(event.scrollY, '0', 'scrollY is 0')
-  t.equal(event.location, 'http://localhost:' + port + '/', 'correct location')
-  t.ok(utils.isNumber(event.windowWidth), 'windowWidth is a number')
-  t.ok(utils.isNumber(event.windowHeight), 'windowHeight is a number')
-  t.ok(utils.isNumber(event.duration), 'duration is a number')
-  t.notOk(isNaN(new Date(event.timestamp)), 'timestamp is a valid date')
-  t.ok(utils.isNumber(event.timezone), 'timezone is a number')
-
-  ;[
-      'referrer', 'path', 'clickX', 'clickY', 'href', 'target', 'visibility'
-    , 'name', 'trackableType', 'trackableValue'
-  ].forEach(function (key) {
-    t.equal(event[key], '', key + ' is empty')
+    ;[
+        'referrer', 'path', 'clickX', 'clickY', 'href', 'target', 'visibility'
+      , 'name', 'trackableType', 'trackableValue'
+    ].forEach(function (key) {
+      t.equal(event[key], '', key + ' is empty')
+    })
   })
-})
 
-test('shutdown', function* (t) {
-  yield utils.shutdown(server, browser)
-})
+  test('teardown', function* (t) {
+    yield browser.get('about:blank')
+  })
+}
