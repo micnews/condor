@@ -25,8 +25,9 @@ Object.keys(tests).forEach(function (key) {
   tests[key](server, browser)
 })
 
-test('teardown browser & server', function* () {
+test('teardown browser & server', function* (t) {
   server.unref()
   tunnel.close()
+  yield browser.sauceJobStatus(t.harness.output.results.ok)
   yield browser.quit()
 })
