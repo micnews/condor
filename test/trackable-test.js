@@ -35,9 +35,10 @@ module.exports = function (server, browser) {
 
   test('trackable-visible on scroll', function* (t) {
     var element = yield browser.elementByCssSelector('#below-the-fold')
+      , location = yield browser.getLocation(element)
       , events = yield {
             visible: waitForEvent('trackable-visible')
-          , action: browser.moveTo(element)
+          , action: browser.safeEval('window.scrollTo(0, ' + (location.y + 1) +  ')')
         }
 
     t.equal(events.visible.path, 'span#below-the-fold')
