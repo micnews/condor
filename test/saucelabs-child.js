@@ -11,6 +11,13 @@ console.log('Browser: %s %s', browserConfig.name, browserConfig.version)
 test('setup browser, server & tunnel', function* () {
   yield server.listen.bind(server, 0)
   tunnel = yield localtunnel.bind(localtunnel, server.address().port)
+
+  tunnel.tunnel_cluster.on('error', function (err) {
+    if (!err.code || err.code !== 'ETIMEDOUT') {
+      throw err
+    }
+  })
+
   server.url = tunnel.url
   yield browser.init({
       name: 'condor'
