@@ -2,14 +2,16 @@
 
 var test = require('gap')
   , localtunnel = require('localtunnel')
+  , getBrowsers = require('get-saucelabs-browsers')
   , path = require('path')
 
   , utils = require('./utils')
-  , build = (new Date()).toJSON()
+  , build = process.env.TRAVIS_BUILD_NUMBER || (new Date()).toJSON()
   , spawn = require('child_process').spawn
+  , browsersToTest = require('../package.json').browsers
 
 require('co')(function* () {
-  var browsers = yield require('./utils/saucelabs')
+  var browsers = yield getBrowsers.bind(null, browsersToTest)
 
   for(var i = 0; i < browsers.length; ++i) {
     var child = spawn(
