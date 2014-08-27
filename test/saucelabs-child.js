@@ -24,7 +24,7 @@ test('setup browser, server & tunnel', function* () {
     , browserName: browserConfig.name
     , version: browserConfig.version
     , platform: browserConfig.platform
-    , build: build
+    , build: process.env.TRAVIS_BUILD_NUMBER || build
   })
 })
 
