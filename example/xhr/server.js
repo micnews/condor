@@ -27,7 +27,7 @@ require('http').createServer(function (req, res) {
     serveBrowserify(req, res)
   } else {
     require('fs').readFile(__dirname + '/index.html', function (err, html) {
-      res.writeHeader({ 'content-type': 'text/html' })
+      res.writeHead(200, { 'content-type': 'text/html' })
       res.end(html)
     })
   }

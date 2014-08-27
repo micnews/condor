@@ -2,6 +2,12 @@
 
 Track what a user does on a site in csv-format
 
+[![NPM](https://nodei.co/npm/condor.png?downloads&stars)](https://nodei.co/npm/condor/)
+
+[![NPM](https://nodei.co/npm-dl/condor.png)](https://nodei.co/npm/condor/)
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/mic-condor.svg?auth=adcabc92c3b9ffe4987e7efc3925a23b)](https://saucelabs.com/u/mic-condor)
+
 ## Example
 
 See the example folder for examples of how to use condor.
