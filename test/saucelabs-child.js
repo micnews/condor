@@ -25,6 +25,9 @@ test('setup browser, server & tunnel', function* () {
     , version: browserConfig.version
     , platform: browserConfig.platform
     , build: process.env.TRAVIS_BUILD_NUMBER || build
+      // set job visibility - 'public' means that we can have a
+      // badge image
+    , public: 'public'
   })
 })
 
