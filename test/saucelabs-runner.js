@@ -1,11 +1,8 @@
 // this file must be run in gnode or similar, to have generators support
 
-var test = require('gap')
-  , localtunnel = require('localtunnel')
-  , getBrowsers = require('get-saucelabs-browsers')
+var getBrowsers = require('get-saucelabs-browsers')
   , path = require('path')
 
-  , utils = require('./utils')
   , build = process.env.TRAVIS_BUILD_NUMBER || (new Date()).toJSON()
   , spawn = require('child_process').spawn
   , browsersToTest = require('../package.json').browsers
