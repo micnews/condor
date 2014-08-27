@@ -7,8 +7,8 @@ module.exports = function (server, browser) {
 
   test('load', function* (t) {
     var events = yield {
-            action: browser.get(server.url)
-          , load: waitForEvent('load')
+            load: waitForEvent('load')
+          , action: browser.get(server.url)
         }
       , event = events.load
 

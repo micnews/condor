@@ -10,10 +10,13 @@ module.exports = function (server, browser) {
   })
 
   test('scroll', function* (t) {
-    yield browser.safeEval('window.scrollTo(0, 300)')
-    var event = yield waitForEvent('scroll')
-    t.equal(event.scrollX, '0')
-    t.equal(event.scrollY, '300')
+    var events = yield {
+            scroll: waitForEvent('scroll')
+          , action: browser.safeEval('window.scrollTo(0, 300)')
+        }
+      , scrollEvent = events.scroll
+    t.equal(scrollEvent.scrollX, '0')
+    t.equal(scrollEvent.scrollY, '300')
   })
 
   test('teardown', function* (t) {

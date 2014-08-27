@@ -7,8 +7,7 @@ module.exports = function (server, browser) {
 
   test('trackable-load, trackable-visible on load', function* (t) {
     var events = yield {
-            action: browser.get(server.url + '/trackable.html')
-          , load: function* () {
+            load: function* () {
               var loadEvents = {}
               for(var i = 0; i < 2; ++i) {
                 var event = yield waitForEvent('trackable-load')
@@ -17,6 +16,7 @@ module.exports = function (server, browser) {
               return loadEvents
             }
           , visible: waitForEvent('trackable-visible')
+          , action: browser.get(server.url + '/trackable.html')
         }
       , aboveTheFoldLoad = events.load['above-the-fold']
       , belowTheFoldLoad = events.load['below-the-fold']
