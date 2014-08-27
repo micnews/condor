@@ -12,18 +12,6 @@ var utils = {
           }
         }
       , createServer: require('./server')
-      , setup: function (server, browser) {
-          return function* () {
-            yield server.listen.bind(server, '0')
-            yield browser.init()
-          }
-        }
-      , shutdown: function (server, browser) {
-          return function* () {
-            yield browser.quit()
-            yield server.close.bind(server)
-          }
-        }
       , isNumber: function (string) {
           return /^\-?[0-9]+$/.test(string)
         }

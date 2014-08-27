@@ -1,21 +1,49 @@
 // this file must be run in gnode or similar, to have generators support
 
-var test = require('gap')
-  , utils = require('./utils')
+var utils = require('./utils')
+  , tape = require('tape')
   , server = utils.createServer()
+  , read = require('co-read')
+  , co = require('co')
     // TODO: use phantomjs for this somehow
   , browser = require('co-wd').remote('http://localhost:9515')
   , tests = require('bulk-require')(__dirname, [ '*-test.js' ])
+  , createTest = function (test) {
+      return function (name, fn) {
+        test(name, function (t) {
+          co(function* (){
+            try {
+              yield fn(t)
+            } catch(err) {
+              t.error(err)
+            }
+            t.end()
+          })()
+        })
+      }
+    }
 
-test('init', function* (t) {
-  yield utils.setup(server, browser)
+co(function* () {
+  yield server.listen.bind(server, 0)
+  yield browser.init()
   server.url = 'http://localhost:' + server.address().port
-})
 
-Object.keys(tests).forEach(function (key) {
-  tests[key](server, browser)
-})
+    var result = []
+    , harness = tape.createHarness()
+    , stream = harness.createStream()
+    , test = createTest(harness)
+    , buf
 
-test('teardown', function* (t) {
-  yield utils.shutdown(server, browser)
-})
+  Object.keys(tests).forEach(function (key) {
+    tests[key](test, server, browser)
+  })
+
+  while(buf = yield read(stream)) {
+    result.push(buf)
+  }
+
+  console.log(result.join(''))
+
+  yield browser.quit()
+  yield server.close.bind(server)
+})()
