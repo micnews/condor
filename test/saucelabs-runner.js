@@ -1,6 +1,7 @@
 var co = require('co')
   , each = require('co-each')
   , extend = require('xtend')
+  , gap = require('gap')
   , getBrowsers = require('get-saucelabs-browsers')
   , localtunnel = require('localtunnel')
   , read = require('co-read')
@@ -8,21 +9,6 @@ var co = require('co')
   , tests = require('bulk-require')(__dirname, [ '*-test.js' ])
 
   , build = process.env.TRAVIS_BUILD_NUMBER || (new Date()).toJSON()
-
-  , createTest = function (test) {
-      return function (name, fn) {
-        test(name, function (t) {
-          co(function* (){
-            try {
-              yield fn(t)
-            } catch(err) {
-              t.error(err)
-            }
-            t.end()
-          })()
-        })
-      }
-    }
 
   , startServer = function (done) {
       var server = require('./utils/server')()
@@ -52,7 +38,7 @@ var co = require('co')
         var result = []
         , harness = tape.createHarness()
         , stream = harness.createStream()
-        , test = createTest(harness)
+        , test = gap.inject(harness)
         , buf
 
       Object.keys(tests).forEach(function (key) {

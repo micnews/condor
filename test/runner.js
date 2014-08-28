@@ -1,6 +1,7 @@
 // this file must be run in gnode or similar, to have generators support
 
 var utils = require('./utils')
+  , gap = require('gap')
   , tape = require('tape')
   , server = utils.createServer()
   , read = require('co-read')
@@ -8,20 +9,6 @@ var utils = require('./utils')
     // TODO: use phantomjs for this somehow
   , browser = require('co-wd').remote('http://localhost:9515')
   , tests = require('bulk-require')(__dirname, [ '*-test.js' ])
-  , createTest = function (test) {
-      return function (name, fn) {
-        test(name, function (t) {
-          co(function* (){
-            try {
-              yield fn(t)
-            } catch(err) {
-              t.error(err)
-            }
-            t.end()
-          })()
-        })
-      }
-    }
 
 co(function* () {
   yield server.listen.bind(server, 0)
@@ -31,7 +18,7 @@ co(function* () {
     var result = []
     , harness = tape.createHarness()
     , stream = harness.createStream()
-    , test = createTest(harness)
+    , test = gap.inject(harness)
     , buf
 
   Object.keys(tests).forEach(function (key) {
