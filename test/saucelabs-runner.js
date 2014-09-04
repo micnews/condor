@@ -55,6 +55,10 @@ var chalk = require('chalk')
               testOutput.push(buf.toString())
             }
 
+            // fail test on sauce labs if the test fail
+            if (harness._results.fail > 0)
+              yield browser.sauceJobStatus(false)
+
             yield browser.quit()
             log('Finished')
             console.log(testOutput.join(''))
