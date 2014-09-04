@@ -1,6 +1,7 @@
 var execFile = require('child_process').execFile
 
   , chalk = require('chalk')
+  , chromedriver = require('chromedriver')
   , co = require('co')
   , each = require('co-each')
   , extend = require('xtend')
@@ -64,30 +65,17 @@ var execFile = require('child_process').execFile
       )
     }
   , localRunner = function* (setupTests) {
-      // -w means that phantomjs starts with a webdriver connector on port 8910
-      var phantomjs = execFile(require('phantomjs').path, [ '-w' ])
-        , browser = require('co-wd').remote('localhost', 8910)
+      chromedriver.start()
+
+      var browser = require('co-wd').remote('http://localhost:9515/')
         , harness = tape.createHarness()
+        , test = gap.inject(harness)
         , buf
         , stream
 
-      // try to connect to the webdriver connector until it gets live
-      yield function tryToConnect (done) {
-        var net = require('net')
-
-        var connection = net.connect(8910)
-        connection.once('connect', function () {
-          connection.end()
-          done()
-        })
-        connection.once('error', function () {
-          setTimeout(function () { tryToConnect(done) }, 100 )
-        })
-      }
-
       yield browser.init()
 
-      yield setupTests(harness, browser)
+      yield setupTests(test, browser)
 
       // harness.createStream starts running the tests setup in setupTests
       stream = harness.createStream()
@@ -95,13 +83,18 @@ var execFile = require('child_process').execFile
         process.stdout.write(buf)
       }
       yield browser.quit()
-      phantomjs.kill()
+      chromedriver.stop()
     }
   , setupTests = function* (test, browser) {
       var server = yield startServer
-        , tunnel = yield thunkify(localtunnel)(server.address().port)
+        , tunnel
 
-      server.url = tunnel.url
+      if (local) {
+        server.url = 'http://localhost:' + server.address().port
+      } else {
+        tunnel = yield thunkify(localtunnel)(server.address().port)
+        server.url = tunnel.url
+      }
 
       Object.keys(tests).forEach(function (key) {
         tests[key](test, server, browser)
@@ -110,7 +103,8 @@ var execFile = require('child_process').execFile
       // run this in a test-closure to have it running last
       test('tearDown', function* (t) {
         server.close()
-        tunnel.close()
+        if (tunnel)
+          tunnel.close()
       })
     }
 

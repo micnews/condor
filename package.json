@@ -15,6 +15,7 @@
   "devDependencies": {
     "bulk-require": "^0.2.1",
     "chalk": "^0.5.1",
+    "chromedriver": "^2.10.0-1",
     "co": "^3.1.0",
     "co-each": "^0.1.0",
     "co-read": "^0.1.0",
