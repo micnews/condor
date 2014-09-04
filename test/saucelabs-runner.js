@@ -1,4 +1,5 @@
-var co = require('co')
+var chalk = require('chalk')
+  , co = require('co')
   , each = require('co-each')
   , extend = require('xtend')
   , gap = require('gap')
@@ -23,9 +24,6 @@ var co = require('co')
 
   , customRunner = function* (baseConfig, browsers, setupTests) {
 
-      console.log('Start running test')
-      console.log(baseConfig)
-
       var browserConfigs = (yield getBrowsers.bind(null, browsers)).map(function (config) {
             return extend(baseConfig, config)
           })
@@ -34,32 +32,32 @@ var co = require('co')
           browserConfigs
         , function* (config) {
             var browser = require('co-wd').remote('ondemand.saucelabs.com', 80)
-              , browserName = config.browserName + ' ' + config.version
-              , result = []
+              , testOutput = []
               , harness = tape.createHarness()
               , test = gap.inject(harness)
               , buf
               , stream
+              , log = function (msg) {
+                  var string = config.browserName + ' ' + config.version + ': ' + msg
+                  console.log(chalk.magenta(string))
+                }
 
-            console.log('Queueing', browserName)
+            log('Queued')
             yield browser.init(config)
 
-            console.log('Running tests on ', browserName)
+            log('Started')
             yield setupTests(test, browser)
 
             // harness.createStream starts running the tests setup in setupTests
             stream = harness.createStream()
 
-            console.log('stream', stream)
-
             while(buf = yield read(stream)) {
-              console.log('read from stream')
-              result.push(buf.toString())
+              testOutput.push(buf.toString())
             }
 
             yield browser.quit()
-            console.log('finished', browserName)
-            console.log(result.join(''))
+            log('Finished')
+            console.log(testOutput.join(''))
           }
       )
     }
@@ -82,7 +80,6 @@ co(function* () {
 
         // run this in a test-closure to have it running last
         test('tearDown', function* (t) {
-          console.log('tearDown')
           server.close()
           tunnel.close()
         })
