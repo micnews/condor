@@ -30,6 +30,7 @@
     "paramify": "^0.1.2",
     "serve-browserify": "^0.3.3",
     "tape": "^2.14.0",
+    "thunkify": "^2.1.2",
     "xhr": "^1.15.0",
     "xtend": "^4.0.0"
   },

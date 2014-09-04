@@ -8,6 +8,7 @@ var chalk = require('chalk')
   , read = require('co-read')
   , tape = require('tape')
   , tests = require('bulk-require')(__dirname, [ '*-test.js' ])
+  , thunkify = require('thunkify')
 
   , build = process.env.TRAVIS_BUILD_NUMBER || (new Date()).toJSON()
 
@@ -22,9 +23,10 @@ var chalk = require('chalk')
       , public: 'public'
     }
 
-  , customRunner = function* (baseConfig, browsers, setupTests) {
+  , saucelabsRunner = function* (baseConfig, browsers, setupTests) {
 
-      var browserConfigs = (yield getBrowsers.bind(null, browsers)).map(function (config) {
+      var browsers = yield thunkify(getBrowsers)(browsers)
+        , browserConfigs = browsers.map(function (config) {
             return extend(baseConfig, config)
           })
 
@@ -67,14 +69,13 @@ var chalk = require('chalk')
     }
 
 co(function* () {
-  yield customRunner(
+  yield saucelabsRunner(
       baseConfig
-    // , require('../package.json').browsers
-    , [ 'internet explorer/10' ]
+    , require('../package.json').browsers
     , function* (test, browser) {
 
         var server = yield startServer
-          , tunnel = yield localtunnel.bind(localtunnel, server.address().port)
+          , tunnel = yield thunkify(localtunnel)(server.address().port)
 
         server.url = tunnel.url
 
