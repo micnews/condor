@@ -1,8 +1,6 @@
-var test = require('gap')
+var utils = require('./utils')
 
-  , utils = require('./utils')
-
-module.exports = function (server, browser) {
+module.exports = function (test, server, browser) {
   var waitForEvent = utils.waitForEvent(server.eventStream)
 
   test('load', function* (t) {
