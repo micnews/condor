@@ -1,7 +1,8 @@
+// expose global condor object
+condor = require('./condor')()
+
 var debounce = require('debounce')
   , xhr = require('xhr')
-  , condor = require('./condor')()
-
   , noop = function () {}
   , data = []
 
@@ -40,6 +41,17 @@ module.exports = function (opts) {
       , sync: true
       , response: true
     }, noop)
+  }
+
+  // this can be called programatically to log a custom event
+  condor.log = function(trackableType, trackableValue) {
+    var extra = {
+      trackableType: trackableType,
+      trackableValue: trackableValue
+    }
+    var csv = this._toCsv('trackable-custom', extra)
+    data.push(csv)
+    batchPost()
   }
 
 }
