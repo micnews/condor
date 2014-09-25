@@ -7,6 +7,7 @@ var addEventListener = require('add-event-listener')
   , toArray = require('to-array')
   , toCsv = require('csv-line')({ escapeNewlines: true })
   , now = require('date-now')
+  , pkg = require('./package.json')
 
   , Condor = function (options) {
       if (!(this instanceof Condor))
@@ -51,7 +52,9 @@ Condor.prototype._toCsv = function (eventType, extra, duration) {
   extra = extra || {}
 
   var array = [
-          eventType
+          pkg.name
+        , pkg.version
+        , eventType
         , window.innerWidth
         , window.innerHeight
         // pageXOffset & pageYOffset instead of scrollX/scrollY for browser
