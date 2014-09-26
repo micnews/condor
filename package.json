@@ -3,6 +3,7 @@
   "dependencies": {
     "add-event-listener": "0.0.1",
     "component-bind": "^1.0.0",
+    "cookie-cutter": "^0.1.1",
     "css-path": "^1.0.0",
     "csv-line": "^1.1.0",
     "date-now": "^1.0.1",
@@ -10,6 +11,7 @@
     "for-each": "^0.3.2",
     "page-visibility": "^1.0.1",
     "paramify": "^0.1.2",
+    "shortid": "^2.0.1",
     "to-array": "^0.1.4"
   },
   "devDependencies": {
@@ -36,7 +38,6 @@
   "scripts": {
     "test": "gnode test/runner.js",
     "local-test": "gnode test/runner.js --local"
-
   },
   "repository": {
     "type": "git",

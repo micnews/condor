@@ -93,3 +93,5 @@ If not explicitly written out, the columns are always included (when available).
 * __name__ The name-attribute on the DOM-element that was changed. Only applicable for _change_ events.
 * __trackableType__ For _trackable-*_ events this is the string from the `data-trackable-type` attribute.
 * __trackableValue__ For _trackable-*_ events this is the string from the `data-trackable-value` attribute
+* __visitor__ A string that uniquely identifies a visitor
+* __session__ The number of all-time sessions for this visitor. This value is incremented after 30 minutes of inactivity.

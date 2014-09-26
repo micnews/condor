@@ -1,5 +1,7 @@
 var addEventListener = require('add-event-listener')
   , bind = require('component-bind')
+  , cookie = require('cookie-cutter')
+  , shortId = require('shortid')
   , debounce = require('debounce')
   , pageVisibility = require('page-visibility')
   , forEach = require('for-each')
@@ -50,6 +52,9 @@ Condor.prototype._toCsv = function (eventType, extra, duration) {
 
   extra = extra || {}
 
+  var session = this._getSessionData()
+  cookie.set('condor-time', Date.now())
+
   var array = [
           eventType
         , window.innerWidth
@@ -73,6 +78,8 @@ Condor.prototype._toCsv = function (eventType, extra, duration) {
         , extra.name
         , extra.trackableType
         , extra.trackableValue
+        , session.visitor
+        , session.count
       ]
 
   return toCsv(array)
@@ -201,6 +208,32 @@ Condor.prototype._startTracking = function () {
       trackTrackable('trackable-hover', trackElm)
     })
   })
+}
+
+Condor.prototype._getSessionData = function() {
+  var session = {}
+    , interval = -1
+    , lastActivity = cookie.get('condor-time')
+
+  session.count = cookie.get('condor-session')
+  if (!session.count) {
+    session.count = 1
+  } else {
+    if (lastActivity) {
+      interval = Date.now() - lastActivity
+    }
+    if (interval === -1 || interval > 30 * 60 * 1000) {
+      session.count++
+    }
+  }
+  cookie.set('condor-session', session.count)
+
+  session.visitor = cookie.get('condor-visitor')
+  if (!session.visitor) {
+    session.visitor = shortId.generate()
+    cookie.set('condor-visitor', session.visitor)
+  }
+  return session
 }
 
 module.exports = Condor
