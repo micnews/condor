@@ -10,7 +10,7 @@ Track what a user does on a site in csv-format
 
 ## Example
 
-See the example folder for examples of how to use condor.
+See the [example folder](https://github.com/micnews/condor/tree/master/example) for examples of how to use condor.
 
 ## Usage
 
@@ -50,7 +50,7 @@ track.onend = function (csv) {
 }
 ```
 
-The callback to './track' gets called everytime a trackable event occur. _csv_ is the data about the event (see [data-format](#data-format) for details)
+The callback to `'/track'` gets called everytime a trackable event occur. _csv_ is the data about the event (see [data-format](#data-format) for details).
 
 ## Csv format
 
