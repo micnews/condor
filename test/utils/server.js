@@ -9,7 +9,8 @@ var fs = require('fs')
     })
   , count = 0
   , headers = [
-        'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY'
+        'client', 'clientVersion'
+      , 'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY'
       , 'location' , 'duration', 'timestamp', 'timezone', 'referrer', 'path'
       , 'clickX', 'clickY', 'href', 'target', 'visibility', 'name'
       , 'trackableType', 'trackableValue'
