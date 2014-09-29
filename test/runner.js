@@ -19,6 +19,8 @@ var localtunnel = require('localtunnel')
       var server = yield startServer
         , tunnel
 
+      yield browser.setWindowSize(800, 600)
+
       if (local) {
         server.url = 'http://localhost:' + server.address().port
       } else {
