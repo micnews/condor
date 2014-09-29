@@ -9,7 +9,7 @@ var fs = require('fs')
     })
   , count = 0
   , headers = [
-        'client', 'clientVersion'
+        'clientName', 'clientVersion'
       , 'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY'
       , 'location' , 'duration', 'timestamp', 'timezone', 'referrer', 'path'
       , 'clickX', 'clickY', 'href', 'target', 'visibility', 'name'
