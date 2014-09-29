@@ -1,7 +1,7 @@
 // this file will be browserified
 
-var condor = require('../../condor')()
-  , xhr = require('xhr')
+condor = require('../../condor')()
+var xhr = require('xhr')
 
 condor.onevent = function (csv) {
   xhr({

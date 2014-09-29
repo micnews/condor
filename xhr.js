@@ -1,7 +1,8 @@
+// expose global condor object
+condor = require('./condor')()
+
 var debounce = require('debounce')
   , xhr = require('xhr')
-  , condor = require('./condor')()
-
   , noop = function () {}
   , data = []
 

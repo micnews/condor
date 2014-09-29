@@ -55,10 +55,23 @@
 
 <br/>
 
-<img src="http://placekitten.com/g/900/900">
+<img src="http://placekitten.com/g/900/900" onclick="shareSomething()">
 <br/>
 <span data-trackable-type="type" data-trackable-value="beep-boop2">Some trackable text with an image in it <img src="http://placekitten.com/g/200/200"></span>
 
 </body>
 <script type="text/javascript" src="/client.js" async="true"></script>
+<script type="text/javascript">
+  function shareSomething() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/share-something", true);
+    xhr.onload = function (e) {
+      if (xhr.readyState === 4) {
+        // log something based on the response from another service
+        condor.log('shared-something', 'userId:12345')
+      }
+    };
+    xhr.send(null);
+  }
+</script>
 </html>
