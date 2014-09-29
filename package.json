@@ -20,7 +20,7 @@
     "csv-parser": "^1.4.4",
     "engine.io": "^1.3.1",
     "engine.io-client": "^1.3.1",
-    "gnode": "0.0.8",
+    "gnode": "^0.1.0",
     "localtunnel": "^1.4.0",
     "mime": "^1.2.11",
     "paramify": "^0.1.2",
