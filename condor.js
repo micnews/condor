@@ -45,6 +45,15 @@ var addEventListener = require('add-event-listener')
       return toArray(document.querySelectorAll('[data-trackable-type][data-trackable-value]'))
     }
 
+Condor.prototype.log = function(trackableType, trackableValue) {
+  var extra = {
+    trackableType: trackableType,
+    trackableValue: trackableValue
+  }
+  var csv = this._toCsv('trackable-custom', extra)
+  this.onevent(csv)
+}
+
 Condor.prototype._toCsv = function (eventType, extra, duration) {
   duration = typeof(duration) === 'number' ? duration : now() - this._startTime
 

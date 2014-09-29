@@ -43,15 +43,4 @@ module.exports = function (opts) {
     }, noop)
   }
 
-  // this can be called programatically to log a custom event
-  condor.log = function(trackableType, trackableValue) {
-    var extra = {
-      trackableType: trackableType,
-      trackableValue: trackableValue
-    }
-    var csv = this._toCsv('trackable-custom', extra)
-    data.push(csv)
-    batchPost()
-  }
-
 }
