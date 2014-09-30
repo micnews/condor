@@ -27,6 +27,13 @@
   <a href="/trackable.html">Some trackable text that's below the fold</a>
 </span>
 
+<button onclick="trackableCustom()">custom</button>
+
 </body>
 <script type="text/javascript" src="/client.js" async="true"></script>
+<script type="text/javascript">
+  function trackableCustom() {
+    condor.log('custom-type', 'custom-value')
+  }
+</script>
 </html>

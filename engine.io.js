@@ -1,6 +1,6 @@
 
-var condor = require('./condor')()
-  , xhr = require('xhr')
+condor = require('./condor')()
+var xhr = require('xhr')
   , createSocket = require('engine.io-client')
 
 module.exports = function (opts) {

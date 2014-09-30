@@ -58,6 +58,16 @@ module.exports = function (test, server, browser) {
     t.equal(events.trackable.trackableValue, 'below-the-fold')
   })
 
+  test('trackable-custom', function* (t) {
+    var element = yield browser.elementByCssSelector('button')
+      , events = yield {
+            trackable: waitForEvent('trackable-custom')
+          , action: browser.clickElement(element)
+        }
+    t.equal(events.trackable.trackableType, 'custom-type')
+    t.equal(events.trackable.trackableValue, 'custom-value')
+  })
+
   test('trackable-click on none-link', function* (t) {
     var element = yield browser.elementByCssSelector('#above-the-fold')
       , events = yield {
