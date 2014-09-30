@@ -57,7 +57,7 @@ The callback to `'/track'` gets called everytime a trackable event occur. _csv_ 
 Track is done in csv that corresponds to the following headers:
 
 ```
-clientName,clientVersion,eventName,windowWidth,windowHeight,scrollX,scrollY,location,duration,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
+clientName,clientVersion,eventName,windowWidth,windowHeight,scrollX,scrollY,location,duration,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue,visitor,session
 ```
 
 If not explicitly written out, the columns are always included (when available). For example, there's always a column describing the width of the window and if a referrer exists that's also always included in the events.
