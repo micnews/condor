@@ -57,7 +57,7 @@ The callback to `'/track'` gets called everytime a trackable event occur. _csv_ 
 Track is done in csv that corresponds to the following headers:
 
 ```
-clientName,clientVersion,eventName,windowWidth,windowHeight,scrollX,scrollY,location,duration,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue
+clientName,clientVersion,eventName,windowWidth,windowHeight,scrollX,scrollY,location,duration,referrer,path,clickX,clickY,href,target,visibility,name,trackableType,trackableValue,visitor,session
 ```
 
 If not explicitly written out, the columns are always included (when available). For example, there's always a column describing the width of the window and if a referrer exists that's also always included in the events.
@@ -95,3 +95,5 @@ If not explicitly written out, the columns are always included (when available).
 * __name__ The name-attribute on the DOM-element that was changed. Only applicable for _change_ events.
 * __trackableType__ For _trackable-*_ events this is the string from the `data-trackable-type` attribute.
 * __trackableValue__ For _trackable-*_ events this is the string from the `data-trackable-value` attribute
+* __visitor__ A string that uniquely identifies a visitor
+* __session__ The number of all-time sessions for this visitor. This value is incremented after 30 minutes of inactivity.

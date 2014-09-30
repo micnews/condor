@@ -13,7 +13,7 @@ var fs = require('fs')
       , 'eventName', 'windowWidth', 'windowHeight', 'scrollX', 'scrollY'
       , 'location' , 'duration', 'timestamp', 'timezone', 'referrer', 'path'
       , 'clickX', 'clickY', 'href', 'target', 'visibility', 'name'
-      , 'trackableType', 'trackableValue'
+      , 'trackableType', 'trackableValue', 'visitor', 'session'
     ].join(',')
 
     // serve the file, default to index.html
